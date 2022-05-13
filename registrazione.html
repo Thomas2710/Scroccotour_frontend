@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <title>Registration page</title>
+
+    </head>
+    <body>
+      <div class="sidenav">
+        <div class="login-main-text">
+            <h2>Registration Page</h2>
+        </div>
+      </div>
+            <div class="main">
+                <div class="col-md-6 col-sm-12">
+                <div class="login-form">
+                    <form action="http://127.0.0.1:8080/api/v1/auth/login" method="POST"></form>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="text" class="form-control" id="Email" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" class="form-control" id="Email" placeholder="Username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" class="form-control" id="psw" placeholder="Password" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Conferma password</label>
+                        <input type="password" class="form-control" id="psw-confirm" placeholder="Conferma password" required>
+                    </div>
+                    <div id="notSamePws" style="visibility:hidden">
+                        <p>Passwords do not match!</p>
+                    </div>
+                    <div id="samePws" style="visibility:hidden">
+                        <p>Passwords do match!</p>
+                    </div>
+                        <input type="button" id="register" value="Registrati" class="btn btn-black">
+                    </form>
+                </div>
+                <a href="http://127.0.0.1:8080/api/v1/auth/login">Hai già un account? Sign in!</a>
+             </div>
+            </div>
+            <div id="message" style="visibility:hidden">
+                <h3>Password must contain the following:</h3>
+                <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+                <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+                <p id="number" class="invalid">A <b>number</b></p>
+                <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+              </div>
+
+
+
+            <script>
+                var myInput = document.getElementById("psw");
+                var myInputConfirm = document.getElementById("psw-confirm");
+                var email = document.getElementById("email");
+                var username = document.getElementById("username");
+                var letter = document.getElementById("letter");
+                var capital = document.getElementById("capital");
+                var number = document.getElementById("number");
+                var length = document.getElementById("length");
+                var submit = document.getElementById("register");
+                
+                // When the user clicks on the password field, show the message box
+                myInput.onfocus = function() {
+                  document.getElementById("message").style.display = "block";
+                }
+                
+                // When the user clicks outside of the password field, hide the message box
+                myInput.onblur = function() {
+                  document.getElementById("message").style.display = "none";
+                }
+                
+                // When the user starts to type something inside the password field
+                myInput.onkeyup = function() {
+                  // Validate lowercase letters
+                  var lowerCaseLetters = /[a-z]/g;
+                  if(myInput.value.match(lowerCaseLetters)) {  
+                    letter.classList.remove("invalid");
+                    letter.classList.add("valid");
+                  } else {
+                    letter.classList.remove("valid");
+                    letter.classList.add("invalid");
+                  }
+                  
+                  // Validate capital letters
+                  var upperCaseLetters = /[A-Z]/g;
+                  if(myInput.value.match(upperCaseLetters)) {  
+                    capital.classList.remove("invalid");
+                    capital.classList.add("valid");
+                  } else {
+                    capital.classList.remove("valid");
+                    capital.classList.add("invalid");
+                  }
+                
+                  // Validate numbers
+                  var numbers = /[0-9]/g;
+                  if(myInput.value.match(numbers)) {  
+                    number.classList.remove("invalid");
+                    number.classList.add("valid");
+                  } else {
+                    number.classList.remove("valid");
+                    number.classList.add("invalid");
+                  }
+                  
+                  // Validate length
+                  if(myInput.value.length >= 8) {
+                    length.classList.remove("invalid");
+                    length.classList.add("valid");
+                  } else {
+                    length.classList.remove("valid");
+                    length.classList.add("invalid");
+                  }
+                }
+
+                submit.onclick = function(){
+                    if (myInput.value === myInputConfirm.value) {
+                        document.getElementById("notSamePws").style.visibility= "hidden";
+                        document.getElementById("samePws").style.visibility = "visible";
+                        const userAction = async () => {
+                        const response = await fetch('http://127.0.0.1:8080/api/v1/auth/register', {
+                            method: 'POST',
+                            body: {
+                                username: username.value,
+                                password: pws.value,
+                                email: email.value
+                            }, // mail, username, password
+                            headers: {
+                            'Content-Type': 'application/json'
+                            }
+                        });
+                        const myJson = await response.json(); //extract JSON from the http response
+                        // do something with myJson
+                        }
+                    } 
+                    else {
+                        document.getElementById("samePws").style.visibility = "hidden";
+                        document.getElementById("notSamePws").style.visibility = "visible";
+                    }
+                }
+                
+
+                </script>
+    </body>
+</html>
