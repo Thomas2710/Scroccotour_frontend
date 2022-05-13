@@ -1,0 +1,22 @@
+{
+  "name": "scroccotour_frontend",
+  "version": "1.0.0",
+  "description": "UI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Thomas2710/Scroccotour_frontend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Thomas2710/Scroccotour_frontend/issues"
+  },
+  "homepage": "https://github.com/Thomas2710/Scroccotour_frontend#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
