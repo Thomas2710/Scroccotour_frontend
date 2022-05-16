@@ -20,20 +20,47 @@
             <div class="main">
                 <div class="col-md-6 col-sm-12">
                 <div class="login-form">
-                    <form>
+                    <form action="http://localhost:8080/api/v1/auth/login" method = "POST">
                     <div class="form-group">
                         <label>Username</label>
-                        <input type="text" class="form-control" placeholder="Username" required>
+                        <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
                     </div>
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="form-control" placeholder="Password" required>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
                     </div>
-                        <button type="submit" class="btn btn-black">Login</button>
+                        <button type="button" id="submit" class="btn btn-black">Login</button>
                     </form>
                 </div>
-                <a href="./registrazione.html">Non hai un account? Registrati!</a>
+                <a href="http://localhost:8081/registrazione">Non hai un account? Registrati!</a>
              </div>
             </div>
+
+            <script>
+                var username = document.getElementById("username");
+                var psw = document.getElementById("password");
+                submit.onclick = async function(){
+                        const response = await fetch('http://localhost:8080/api/v1/auth/login', {
+                            method: 'POST',
+                            credentials: 'include',
+                            body: new URLSearchParams({
+                                username: username.value,
+                                password: psw.value,
+                            }), // mail, username, password
+                            headers: {
+                              'Content-Type': 'application/x-www-form-urlencoded'
+                            }
+                        }
+                        );
+                        const myJson = await response.json();
+                        if(myJson.success === true){
+                           //location.assign('/');
+                           console.log("Successone");
+                        }
+                        else{
+                            console.log("error message");
+                        }
+                    }
+            </script>
     </body>
 </html>
