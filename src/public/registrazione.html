@@ -15,16 +15,16 @@
     <body>
       <div class="sidenav">
         <div class="login-main-text">
-            <h2>Registration Page</h2>
+            <h2>Registration page</h2>
         </div>
       </div>
             <div class="main">
                 <div class="col-md-6 col-sm-12">
                 <div class="login-form">
-                    <form action="http://127.0.0.1:8080/api/v1/auth/login" method="POST"></form>
+                    <form>
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="text" class="form-control" id="email" placeholder="Email" required>
+                        <input type="email" class="form-control" id="email" placeholder="Email" required>
                     </div>
                     <div class="form-group">
                         <label>Username</label>
@@ -43,7 +43,7 @@
                         <input type="button" id="register" value="Registrati" class="btn btn-black">
                     </form>
                 </div>
-                <a href="./login.html">Hai già un account? Sign in!</a>
+                <a href="http://localhost:8081/login">Hai già un account? Sign in!</a>
              </div>
             </div>
             <div id="message" style="visibility:hidden">
@@ -128,18 +128,21 @@
                         document.getElementById("samePws").innerHTML = "<p>Passwords match</p>";
                         const response = await fetch('http://localhost:8080/api/v1/auth/register', {
                             method: 'POST',
-                            body: {
-                                username: username.text,
+                            credentials: 'include',
+                                body: new URLSearchParams({
+                                username: username.value,
                                 password: psw.value,
-                                email: email.value
-                            }, // mail, username, password
+                                email: email.value,
+                            }), // mail, username, password
                             headers: {
-                            'Content-Type': 'application/json'
+                              'Content-Type': 'application/x-www-form-urlencoded'
                             }
-                        });
+                        }
+                        );
+
+
+                        /*
                         const myJson = await response.json(); //extract JSON from the http response
-                        console.log("Ciao");
-                        console.log(myJson.success);
                         if(!myJson.success){
                             document.getElementById("errore").innerHTML = "<p>"+myJson.message+"</p>";
                         }
@@ -147,7 +150,9 @@
                         else{
 
                         }
+                    */
                     } 
+                    
                     else {
                         document.getElementById("samePws").style.visibility = "visible";
                         document.getElementById("samePws").innerHTML = "<p>Passwords don't match</p>";
