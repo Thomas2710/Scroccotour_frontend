@@ -14,6 +14,9 @@ app.get('/registrazione', function(req, res) {
 app.get('/home', function(req, res) {
     res.sendFile(path.join(__dirname, './public/addHome.html'));
   });
+app.get('/profilo', function(req, res) {
+    res.sendFile(path.join(__dirname, './public/profilo.html'));
+  });
 //app.use('/static', express.static('public'));
 app.listen(process.env.PORT || 8081, '0.0.0.0', () => {
     console.log(`Scroccotour UI server started`);
