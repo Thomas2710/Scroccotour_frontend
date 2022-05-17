@@ -54,8 +54,7 @@
                         );
                         const myJson = await response.json();
                         if(myJson.success === true){
-                           //location.assign('/');
-                           //console.log("Successone");
+                           window.location.replace("http://localhost:8081/profilo")
                         }
                         else{
                             console.log("error message");
