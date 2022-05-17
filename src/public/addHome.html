@@ -12,6 +12,7 @@
         <title>Add home page</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="/static/utilities.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
 
         <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
@@ -33,7 +34,7 @@
                 <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Nuovo Tour</a></li>
                 <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Profilo</a></li>
                 <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Recensioni</a></li>
-                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Logout</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/logout')"><a href="#">Logout</a></li>
             </ul>
             </div>
         </div>
@@ -94,6 +95,11 @@
                 var image = document.getElementById("image");
                 var tags = document.getElementById("tags");
 
+                var token = getCookie("jwt")
+                var data = parseJwt(token)
+
+                console.log(token);
+
                 submit.onclick = async function() {
                         // process beds
                         var parsedBeds = parseInt(beds.value);
@@ -113,7 +119,7 @@
                         // process tags
                         var parsedTags = tags.value.trim().split(",");
 
-                        const response = await fetch('http://localhost:8080/api/v1/home/', {
+                        const response = await fetch('http://localhost:8080/api/v1/home', {
                             method: 'POST',
                             body: new URLSearchParams({
                                 address: address.value,
@@ -126,7 +132,8 @@
                             }),
                             headers: {
                                 // TODO: Add JWT token
-                              'Access': 'Bearer ' + "AAAAA"
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                'Authorization': 'Bearer ' + token
                             }
                         }
                         );

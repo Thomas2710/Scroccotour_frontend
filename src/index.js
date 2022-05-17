@@ -5,6 +5,8 @@ const path = require('path');
 
 app.use(cors());
 
+app.use('/static', express.static(path.join(__dirname, 'public')))
+
 app.get('/login', function(req, res) {
     res.sendFile(path.join(__dirname, './public/login.html'));
   });
@@ -19,9 +21,9 @@ app.get('/registrazione', function(req, res) {
 app.get('/logout', function(req, res){
     res.cookie('jwt', '', {maxAge: 1});
     res.clearCookie('jwt');
-    res.status(200);
-    res.redirect('/home');
+    res.redirect('/login');
 });
+
 app.get('/home', function(req, res) {
     res.sendFile(path.join(__dirname, './public/addHome.html'));
   });
