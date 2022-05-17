@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <title>Pagina di dettaglio alloggio</title>
+
+    </head>
+    <body>
+        <h2>Informazioni alloggio a <label id="nomeMeta"></label></h2>
+        <label>Prenotazione:</label>
+        <br>
+        <label>Orario di check-in:</label>
+        <br>
+        <label>Orario di check-out:</label>
+        <br>
+        <label>Host:</label>
+        <h3>Recensioni</h3>
+        <script>
+            window.onload=function(){
+                console.log("ciao");
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                var meta = urlParams.get('meta');
+                document.getElementById('nomeMeta').innerText = meta;
+                const response = await fetch('http://localhost:8080/api/v1/lista-hosting', {
+                            method: 'GET',
+                            credentials: 'include',
+                                body: new URLSearchParams({
+                            }), //Devo passare l'utente per cui fare la query, poi scelgo qui di postare la meta che mi serve
+                            headers: {
+                              'Content-Type': 'application/x-www-form-urlencoded',
+                              'Authorization': 'Bearer' + token
+                            }
+            });
+        }
+        </script>
+    </body>
+</html>

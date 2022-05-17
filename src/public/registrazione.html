@@ -13,7 +13,7 @@
 
     </head>
     <body>
-      <div class="sidenav">
+      <div class="container">
         <div class="login-main-text">
             <h2>Registration page</h2>
         </div>
@@ -139,18 +139,15 @@
                             }
                         }
                         );
-
-
-                        /*
                         const myJson = await response.json(); //extract JSON from the http response
                         if(!myJson.success){
                             document.getElementById("errore").innerHTML = "<p>"+myJson.message+"</p>";
                         }
                         //Registration successfull
                         else{
+                          window.location.replace('http://localhost:8081/login');
 
                         }
-                    */
                     } 
                     
                     else {
