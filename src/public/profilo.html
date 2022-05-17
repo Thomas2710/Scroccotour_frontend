@@ -31,12 +31,12 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="index.php">I Tuoi Tour</a></li>
-                <li><a href="about.php">TopTour</a></li>
-                <li><a href="#portfolio">Nuovo Tour</a></li>
-                <li><a href="#">Profilo</a></li>
-                <li><a href="contact.php">Recensioni</a></li>
-                <li><a href="contact.php">Logout</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">I tuoi Tour</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">TopTour</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Nuovo Tour</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Profilo</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Recensioni</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Logout</a></li>
             </ul>
             </div>
         </div>
@@ -71,7 +71,7 @@
         var kek = getCookie("jwt")
         
         var data = parseJwt(kek)
-        console.log(data)
+        
       </script>
       <div class="sidenav">
         <div class="login-main-text">
@@ -79,7 +79,25 @@
         </div>
       <script>document.getElementById("kok").innerHTML = data.user.username</script>
       </div>
-      <div>I tuoi alloggi</div>
+      <div><h2>Le tue statistiche</h2></br>
+        <label id="tour_completati"></label><br>
+        <label id="guest_accolti"></label><br>
+        <label id="km_percorsi"></label><br>
+        <label id="paesi_visitati"></label><br>
+        <label id="meta_preferita"></label><br>
+        <label id="voto_host"></label><br>
+        <label id="voto_guest"></label><br>
+        <script>
+            document.getElementById("tour_completati").innerHTML = "Tour completati: " + data.user.tour_completati
+            document.getElementById("guest_accolti").innerHTML = "Guest accolti: " + data.user.guest_accolti
+            document.getElementById("km_percorsi").innerHTML = "Km percorsi: " + data.user.km_percorsi
+            document.getElementById("paesi_visitati").innerHTML = "Paesi visitati: " + data.user.paesi_visitati
+            document.getElementById("meta_preferita").innerHTML = "Meta preferita: " + data.user.meta_preferita
+            document.getElementById("voto_host").innerHTML = "Voto come host: " + data.user.voto_host
+            document.getElementById("voto_guest").innerHTML = "Voto come guest: " + data.user.voto_guest
+        </script>
+    </div>
+      <div><h2>I tuoi alloggi</h2></br></div>
       <table id="table" class="table"></table>
       <script>
                 var token = kek
@@ -91,7 +109,7 @@
                     }
                     }).then(response=>response.json())
                     .then(data=>{ 
-
+                    
                     var table = document.getElementById("table")
                     data.forEach( d => {
                         var row = table.insertRow(0);
@@ -99,18 +117,16 @@
                         var cell1 = row.insertCell(0);
                         var cell2 = row.insertCell(1);
 
-                        cell1.innerHTML = '<a href="#">'+d.meta+'</a>';
+                        cell1.innerHTML = '<a href="#">'+d.city+'</a>';
                         cell2.innerHTML = d.address
-
-                        
-                        
+  
                         
                     })
                     })
                 
             
     </script>
-    
+    <button onclick="window.location.replace('http://localhost:8081/home')">Aggiungi alloggio</button>
 
 
             
