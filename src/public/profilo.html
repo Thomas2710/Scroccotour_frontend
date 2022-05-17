@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html><!--Navbar-->
+
+    <head>
+       
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <title>Il mio profilo</title>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="index.php">I Tuoi Tour</a></li>
+                <li><a href="about.php">TopTour</a></li>
+                <li><a href="#portfolio">Nuovo Tour</a></li>
+                <li><a href="#">Profilo</a></li>
+                <li><a href="contact.php">Recensioni</a></li>
+                <li><a href="contact.php">Logout</a></li>
+            </ul>
+            </div>
+        </div>
+        </nav>
+    </head>
+    
+    <body>
+      <script>
+        
+        function parseJwt (token) {
+            
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+
+            return JSON.parse(jsonPayload);
+            };
+
+            function getCookie(cName) {
+                const name = cName + "=";
+                const cDecoded = decodeURIComponent(document.cookie); //to be careful
+                const cArr = cDecoded.split('; ');
+                let res;
+                cArr.forEach(val => {
+                    if (val.indexOf(name) === 0) res = val.substring(name.length);
+                })
+                return res
+                }
+
+        var kek = getCookie("jwt")
+        
+        var data = parseJwt(kek)
+        console.log(data)
+      </script>
+      <div class="sidenav">
+        <div class="login-main-text">
+            <h2>Bentornato <label id="kok"></label></h2>
+        </div>
+      <script>document.getElementById("kok").innerHTML = data.user.username</script>
+      </div>
+      <div>I tuoi alloggi</div>
+      <table id="table" class="table"></table>
+      <script>
+                var token = kek
+                var response = fetch('http://localhost:8080/api/v1/lista-hosting/myalloggi', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'text/plain',
+                        'Authorization': 'Bearer ' + token
+                    }
+                    }).then(response=>response.json())
+                    .then(data=>{ 
+
+                    var table = document.getElementById("table")
+                    data.forEach( d => {
+                        var row = table.insertRow(0);
+                        row.onclick = window.location.replace("#")
+                        var cell1 = row.insertCell(0);
+                        var cell2 = row.insertCell(1);
+
+                        cell1.innerHTML = '<a href="#">'+d.meta+'</a>';
+                        cell2.innerHTML = d.address
+
+                        
+                        
+                        
+                    })
+                    })
+                
+            
+    </script>
+    
+
+
+            
+
+            
+    </body>
+</html>

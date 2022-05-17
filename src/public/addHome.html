@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <title>Add home page</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="sidenav">
+                <div class="login-main-text">
+                    <h2>Add home page</h2>
+                </div>
+            </div>
+                <div class="main">
+                    <div class="col-md-6 col-sm-12">
+                    <div class="login-form">
+                        <form action="http://localhost:8080/api/v1/auth/login" method = "POST">
+                        <div class="form-group">
+                            <label>Indirizzo</label>
+                            <input type="text" id="address" name="address" class="form-control" placeholder="Via Sommarive, 9" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Città</label>
+                            <input type="text" id="city" name="city" class="form-control" placeholder="Povo" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Posti disponibili</label>
+                            <input type="text" id="beds" name="beds" class="form-control" placeholder="7" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Data di inizio disponibilità</label>
+                            <input type="text" id="start" name="start" class="form-control" placeholder="24/06/2022" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Data di fine disponibilità</label>
+                            <input type="text" id="end" name="end" class="form-control" placeholder="24/12/2022" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Link immagine di copertina</label>
+                            <input type="text" id="image" name="image" class="form-control" placeholder="https://giphy.com/gifs/deal-with-it-doge-qrwthQPPQrtEk" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tag (separati da una virgola)</label>
+                            <input type="text" id="tags" name="tags" class="form-control" placeholder="sole,mare,arancine" required>
+                        </div>
+                        <button type="button" id="submit" class="btn btn-black">Aggiungi Casa</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <script>
+                var address = document.getElementById("address");
+                var city = document.getElementById("city");
+                var beds = document.getElementById("beds");
+                var start = document.getElementById("start");
+                var end = document.getElementById("end");
+                var image = document.getElementById("image");
+                var tags = document.getElementById("tags");
+
+                submit.onclick = async function() {
+                        // process beds
+                        var parsedBeds = parseInt(beds.value);
+
+                        // process start date
+                        var startTimestamp = start.value;
+                        startTimestamp = startTimestamp.split("/");
+                        startTimestamp = new Date( startTimestamp[2], startTimestamp[1] - 1, startTimestamp[0]);
+                        startTimestamp = startTimestamp.getTime();
+
+                        // process start date
+                        var endTimestamp = end.value;
+                        endTimestamp = endTimestamp.split("/");
+                        endTimestamp = new Date( endTimestamp[2], endTimestamp[1] - 1, endTimestamp[0]);
+                        endTimestamp = endTimestamp.getTime();
+
+                        // process tags
+                        var parsedTags = tags.value.trim().split(",");
+
+                        const response = await fetch('http://localhost:8080/api/v1/home/', {
+                            method: 'POST',
+                            body: new URLSearchParams({
+                                address: address.value,
+                                city: city.value,
+                                beds: parsedBeds,
+                                start: startTimestamp,
+                                end: endTimestamp,
+                                image: image.value,
+                                tags: parsedTags
+                            }),
+                            headers: {
+                                // TODO: Add JWT token
+                              'Access': 'Bearer ' + "AAAAA"
+                            }
+                        }
+                        );
+                        const myJson = await response.json();
+                        if(myJson.success === true){
+                           console.log("Casa aggiunta con successo");
+
+                           // TODO: Redirect to user page
+                        }
+                        else {
+                            console.log(response.text);
+                        }
+                    }
+            </script>
+    </body>
+</html>
