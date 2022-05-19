@@ -96,6 +96,9 @@
                         }
                         );
                         const myJson = await response.json();
+                    stringson = JSON.stringify(myJson)
+                    var redirect = "http://localhost:8081/tour?tour=" + stringson
+                    window.location.replace(redirect)
                 }
 
 
