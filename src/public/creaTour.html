@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <title>Crea tour manuale</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="/static/utilities.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">I tuoi Tour</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">TopTour</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Nuovo Tour</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Profilo</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Recensioni</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/logout')"><a href="#">Logout</a></li>
+            </ul>
+            </div>
+        </div>
+</nav>
+    </head>
+    <body onload="updateTourInfo()">
+        <div class="container">
+            <div class="sidenav">
+                <div class="login-main-text">
+                    <h2>Crea tour manuale</h2>
+                </div>
+            </div>
+                <div class="main">
+                    <div class="col-md-6 col-sm-12">
+                    <div class="login-form" id="homesContainer">
+                        <h1>Informazione generali</h1>
+                        <label id="startLabel">Partirai il </label> <br />
+                        <label id="meteLabel">Numero di mete: </label> <br />
+                        <label id="lengthLabel">Durata: </label> <br />
+                        <label id="stateLabel">Stato: </label> <br /> <br />
+
+                        <div id="cities">
+                            <label>Visiterai le seguenti città: </label>
+                        </div>
+
+                        <br />
+                        <div class="form-group">
+                            <label>Nuova meta</label>
+                            <input type="text" id="newCity" name="città" class="form-control" placeholder="Brescia" required>
+                        </div>
+                
+                        <button type="button" onclick="addHome()" class="btn btn-black">Aggiungi meta</button>
+
+                        <button type="button" onclick="prenota()" class="btn btn-black">Prenota</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <script>
+                // Common Variables
+                var token = getCookie("jwt");
+
+                // Process data
+                var query = window.location.search;
+                var params = new URLSearchParams(query);
+                var json = JSON.parse(params.get("tour"));
+            
+                const addHome = async () => {
+                    var city = document.getElementById('newCity').value;
+
+                    if (city === "") {
+                        alert("Inserisci una meta prima di continuare.");
+                        return;
+                    }
+
+                    json.cities.push(city);
+                    var newJson = JSON.stringify(json);
+
+                    window.location.replace("http://localhost:8081/tour?tour=" + newJson);
+                }
+
+                const prenota = async () => {
+                    // TODO: Aggiungere controllo alloggi
+                    
+                }
+
+                const moveToDetail = (city) => {
+                    window.location.replace("http://localhost:8081/ricerca?city=" + city + "&tour=" + JSON.stringify(json));
+                }
+
+                const createCity = (name, index) => {
+                    var template = [
+                        '<div onclick="moveToDetail(\'' + name + '\')">',
+                        '<label id="nome">Meta: ' + name + '</label> <br />',
+                        '</div>'
+                    ];
+
+                    return $(template.join(''));
+                }
+
+                const updateTourInfo = async () => {
+                    var start = json.start;
+                    var mete = json.cities.length;
+                    var end = json.end;
+                    var stato = json.completed == 0 ? "Bozza" : "Completo";
+                    tourId = json._id;
+
+                    document.getElementById("startLabel").innerText += " " + timeConverter(start);
+                    document.getElementById("meteLabel").innerText += " " + mete;
+                    document.getElementById("lengthLabel").innerText += " " + json.nights_remaining;
+                    document.getElementById("stateLabel").innerText += " " + stato;
+
+                    console.log(json);
+
+                    var cities = $();
+                    
+                    json.cities.forEach(function(city, i) {
+                        console.log(city, i)
+                        cities = cities.add(createCity(city, i));
+                    });
+
+                    console.log(cities);
+
+                    // Add them to the page... for instance the <body>
+                    $(function() {
+                        $('#cities').append(cities);
+                    });
+                }
+
+                
+            </script>
+    </body>
+</html>

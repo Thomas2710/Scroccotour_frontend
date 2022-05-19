@@ -14,9 +14,14 @@ app.get('/registrazione', function(req, res) {
     res.sendFile(path.join(__dirname, './public/registrazione.html'));
   });
 
-  app.get('/alloggio', function(req, res) {
-    res.sendFile(path.join(__dirname, './public/informazioniAlloggio.html'));
-  });
+app.get('/alloggio', function(req, res) {
+  res.sendFile(path.join(__dirname, './public/informazioniAlloggio.html'));
+});
+
+app.get('/tour', function(req, res) {
+  res.sendFile(path.join(__dirname, './public/creaTour.html'));
+});
+  
 
 app.get('/logout', function(req, res){
     res.cookie('jwt', '', {maxAge: 1});
