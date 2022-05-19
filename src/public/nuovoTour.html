@@ -53,59 +53,57 @@
       </script>
       <div class="sidenav">
         <div class="login-main-text">
-            <h2>Bentornato <label id="kok"></label></h2>
-        </div>
-      <script>document.getElementById("kok").innerHTML = data.user.username</script>
-      </div>
-      <div><h2>Le tue statistiche</h2></br>
-        <label id="tour_completati"></label><br>
-        <label id="guest_accolti"></label><br>
-        <label id="km_percorsi"></label><br>
-        <label id="paesi_visitati"></label><br>
-        <label id="meta_preferita"></label><br>
-        <label id="voto_host"></label><br>
-        <label id="voto_guest"></label><br>
-        <script>
-            document.getElementById("tour_completati").innerHTML = "Tour completati: " + data.user.tour_completati
-            document.getElementById("guest_accolti").innerHTML = "Guest accolti: " + data.user.guest_accolti
-            document.getElementById("km_percorsi").innerHTML = "Km percorsi: " + data.user.km_percorsi
-            document.getElementById("paesi_visitati").innerHTML = "Paesi visitati: " + data.user.paesi_visitati
-            document.getElementById("meta_preferita").innerHTML = "Meta preferita: " + data.user.meta_preferita
-            document.getElementById("voto_host").innerHTML = "Voto come host: " + data.user.voto_host
-            document.getElementById("voto_guest").innerHTML = "Voto come guest: " + data.user.voto_guest
-            
-        </script>
-    </div>
-      <div><h2>I tuoi alloggi</h2></br></div>
-      <table id="table" class="table"></table>
-      <script>
-                var response = fetch('http://localhost:8080/api/v1/lista-hosting/myalloggi', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'text/plain',
-                        'Authorization': 'Bearer ' + token
-                    }
-                    }).then(response=>response.json())
-                    .then(data=>{ 
-                    
-                    var table = document.getElementById("table")
-                    data.forEach( d => {
-                        var row = table.insertRow(0);
-                        row.onclick = window.location.replace("#")
-                        var cell1 = row.insertCell(0);
-                        var cell2 = row.insertCell(1);
+            <h2>Crea un nuovo Tour <label id="kok"></label></h2>
+            <label> Inizio del Tour</label>
+            <input type="date" id="start_date"></br>
+            <label> Fine del Tour</label>
+            <input type="date" id="end_date"></br>
+            <label>Numero di partecipanti</label>
+            <input type="number" id="people" min=1 max=5></br>
+            <input type="radio" value="manuale" name="tipo" >  Nuovo Tour manuale</input></br>
+            <input type="radio" value="toptour" name="tipo" >  Top Tour</input></br>
+            <input type="radio" value="randomtour" name="tipo">    Random Tour</input></br>
+            <input type="submit" id="sub"></br>
+            <script src="/static/utilities.js"></script>
+      
+            <script>
+                var token = getCookie("jwt")
+                var submit = document.getElementById("sub")
+                submit.onclick = async function (){
+                    var start = document.getElementById("start_date")
+                    var end  = document.getElementById("end_date")
+                    var people  = document.getElementById("people")
+                    var ele = document.getElementsByName('tipo');
+                    var selection = "randomtour"
+                        for(i = 0; i < ele.length; i++) {
+                            if(ele[i].checked)
+                                selection = ele[i].value
+                        }
+                    console.log(selection)
+                    const response = await fetch('http://localhost:8080/api/v1/tour/newtour', {
+                            method: 'POST',
+                            credentials: 'include',
+                                body: new URLSearchParams({
+                                start: start.value,
+                                end: end.value,
+                                selection: selection,
+                                people: people.value
+                            }), // mail, username, password
+                            headers: {
+                              'Content-Type': 'application/x-www-form-urlencoded',
+                              'Authorization': 'Bearer ' + token
+                            }
+                        }
+                        );
+                        const myJson = await response.json();
+                }
 
-                        cell1.innerHTML = '<a href="http://localhost:8081/alloggio?id='+d._id+'">'+d.city+'</a>';
-                        cell2.innerHTML = d.address
-                        
-  
-                        
-                    })
-                    })
-                
-            
-    </script>
-    <button onclick="window.location.replace('http://localhost:8081/home')">Aggiungi alloggio</button>
+
+            </script>
+            </form>
+        </div>
+      
+
 
 
             
