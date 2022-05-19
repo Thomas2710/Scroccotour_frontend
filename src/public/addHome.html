@@ -31,7 +31,7 @@
             <ul class="nav navbar-nav">
                 <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">I tuoi Tour</a></li>
                 <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">TopTour</a></li>
-                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Nuovo Tour</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/nuovotour')"><a href="#">Nuovo Tour</a></li>
                 <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Profilo</a></li>
                 <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Recensioni</a></li>
                 <li onclick="window.location.replace('http://localhost:8081/logout')"><a href="#">Logout</a></li>
@@ -96,9 +96,6 @@
                 var tags = document.getElementById("tags");
 
                 var token = getCookie("jwt")
-                var data = parseJwt(token)
-
-                console.log(token);
 
                 submit.onclick = async function() {
                         // process beds
@@ -131,20 +128,18 @@
                                 tags: parsedTags
                             }),
                             headers: {
-                                // TODO: Add JWT token
-                                'Content-Type': 'application/x-www-form-urlencoded',
                                 'Authorization': 'Bearer ' + token
                             }
                         }
                         );
                         const myJson = await response.json();
-                        if(myJson.success === true){
+                        if(myJson.success){
                            console.log("Casa aggiunta con successo");
 
-                           // TODO: Redirect to user page
+                           window.location.replace("http://localhost:8081/profilo")
                         }
                         else {
-                            console.log(response.text);
+                            alert(myJson.message);
                         }
                     }
             </script>

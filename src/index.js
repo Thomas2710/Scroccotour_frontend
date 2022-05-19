@@ -34,6 +34,10 @@ app.get('/profilo', function(req, res) {
   app.get('/ricerca', function(req, res) {
     res.sendFile(path.join(__dirname, './public/ricercaAlloggi.html'));
   });
+  
+app.get('/nuovotour', function(req, res) {
+  res.sendFile(path.join(__dirname, './public/nuovoTour.html'));
+  });
 //app.use('/static', express.static('public'));
 app.listen(process.env.PORT || 8081, '0.0.0.0', () => {
     console.log(`Scroccotour UI server started`);
