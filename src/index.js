@@ -30,6 +30,11 @@ app.get('/home', function(req, res) {
 app.get('/profilo', function(req, res) {
     res.sendFile(path.join(__dirname, './public/profilo.html'));
   });
+
+  app.get('/ricerca', function(req, res) {
+    res.sendFile(path.join(__dirname, './public/ricercaAlloggi.html'));
+  });
+  
 app.get('/nuovotour', function(req, res) {
   res.sendFile(path.join(__dirname, './public/nuovoTour.html'));
   });
