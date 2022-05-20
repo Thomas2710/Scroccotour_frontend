@@ -113,8 +113,6 @@
                         endTimestamp = new Date( endTimestamp[2], endTimestamp[1] - 1, endTimestamp[0]);
                         endTimestamp = endTimestamp.getTime();
 
-                        // process tags
-                        var parsedTags = tags.value.trim().split(",");
                         const response = await fetch('http://localhost:8080/api/v1/home', {
                             method: 'POST',
                             body: new URLSearchParams({
@@ -124,7 +122,7 @@
                                 start: startTimestamp,
                                 end: endTimestamp,
                                 image: image.value,
-                                tags: parsedTags
+                                tags: tags.value
                             }),
                             headers: {
                                 'Authorization': 'Bearer ' + token
