@@ -36,6 +36,10 @@ app.get('/profilo', function(req, res) {
     res.sendFile(path.join(__dirname, './public/profilo.html'));
   });
 
+  app.get('/info-alloggio', function(req, res) {
+    res.sendFile(path.join(__dirname, './public/informazioniAlloggioPrenotazione.html'));
+  });
+
   app.get('/ricerca', function(req, res) {
     res.sendFile(path.join(__dirname, './public/ricercaAlloggi.html'));
   });
