@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="/static/utilities.js"></script>
+        <title>Pagina di dettaglio alloggio</title>
+        <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+            <div class="container">
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                              <span class="sr-only">Toggle navigation</span>
+                              <span class="icon-bar"></span>
+                              <span class="icon-bar"></span>
+                              <span class="icon-bar"></span>
+                          </button>
+              </div>
+          
+              <!-- Collect the nav links, forms, and other content for toggling -->
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                  <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">I tuoi Tour</a></li>
+                          <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">TopTour</a></li>
+                          <li onclick="window.location.replace('http://localhost:8081/nuovotour')"><a href="#">Nuovo Tour</a></li>
+                          <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Profilo</a></li>
+                          <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Recensioni</a></li>
+                          <li onclick="window.location.replace('http://localhost:8081/logout')"><a href="#">Logout</a></li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+    </head>
+    <body>
+        <h2>Alloggio a <label id="nomeMeta"></label> da <label id="host"></label></h2>
+        <form>
+        <label id="indirizzo">Indirizzo: </label>
+        <br>
+        <label id="inizio">Inizio: </label>
+        <br>
+        <label id="fine">Fine: </label>
+        <br>
+        <button type="button" id="submit" class="btn btn-black">Aggiungi alloggio</button>
+        </form>
+        <h3>Recensioni</h3>
+        <script>
+            
+        var token = getCookie("jwt")
+        var data = parseJwt(token)
+        var submit = document.getElementById('submit');
+        var nomeMeta = document.getElementById('nomeMeta');
+        var indirizzo = document.getElementById('indirizzo');
+        var inizio = document.getElementById('inizio');
+        var fine = document.getElementById('fine');
+        var host = document.getElementById('host');
+        var id;
+        var tour;
+        var start;
+        var end;
+        var city;
+        var cityId;
+        
+            window.onload= function(){
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                cityId = urlParams.get('cityId');
+                start = urlParams.get('start');
+                end =  urlParams.get('end');
+                tourId = urlParams.get('tourId');
+                console.log(tourId);
+                city = urlParams.get('city');
+
+                host.innerText = urlParams.get('host');
+                nomeMeta.innerText = city;
+                indirizzo.innerText = indirizzo.innerText + urlParams.get('address');
+                inizio.innerText = inizio.innerText + timeConverter(start/1000);
+                fine.innerText = fine.innerText + timeConverter(end/1000);
+          }
+
+          submit.onclick = async function(){
+            var response = await fetch('http://localhost:8080/api/v1/tour/addCity', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Authorization': 'Bearer ' + token
+                        },
+                        body: new URLSearchParams({
+                            'start': start,
+                            'end': end,
+                            'city': city,
+                            'cityId' : cityId,
+                            'tourId' : tourId,
+                         }),
+                    });
+                    /*
+            const myJson = await response.json();
+            console.log(myJson);
+            if(response.status === 200){
+
+            }
+            else{
+              console.log("Status error, item not found");
+            }
+            */
+          }
+
+
+
+        
+        </script>
+    </body>
+</html>
