@@ -50,6 +50,12 @@
             
         var token = getCookie("jwt")
         var data = parseJwt(token)
+        var submit = document.getElementById('submit');
+        var nomeMeta = document.getElementById('nomeMeta');
+        var indirizzo = document.getElementById('indirizzo');
+        var inizio = document.getElementById('inizio');
+        var fine = document.getElementById('fine');
+        var host = document.getElementById('host');
 
             window.onload= async function(){
                 const queryString = window.location.search;
@@ -65,13 +71,13 @@
             });
             const myJson = await response.json();
             console.log(myJson);
-            document.getElementById('nomeMeta').innerText = document.getElementById('nomeMeta').innerText + myJson.city;
-            document.getElementById('indirizzo').innerText = document.getElementById('indirizzo').innerText + myJson.address;
-            var inizio = timeConverter(myJson.start);
-            document.getElementById('inizio').innerText = document.getElementById('inizio').innerText + inizio;
-            var fine = timeConverter(myJson.end);
-            document.getElementById('fine').innerText = document.getElementById('fine').innerText + fine;
-            document.getElementById('host').innerText = document.getElementById('host').innerText + myJson.host;
+            nomeMeta.innerText = nomeMeta.innerText + myJson.city;
+            indirizzo.innerText = indirizzo.innerText + myJson.address;
+            var start = timeConverter(myJson.start);
+            inizio.innerText = inizio.innerText + start;
+            var end = timeConverter(myJson.end);
+            fine.innerText = fine.innerText + end;
+            host.innerText = host.innerText + myJson.host;
         }
         </script>
     </body>
