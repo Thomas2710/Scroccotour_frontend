@@ -38,19 +38,20 @@
     </head>
     <body>
         <div class="container">
-            <h2>La tua prossima meta per il tour</h2>
+            <h2>Informazioni per l'alloggio a <label id="meta"></label></h2>
+            <label for="nights">Nights of the stay:</label>
+            <select name="nights" id="nights">
+            </select>
+            <div id="checkbox">
+
+            </div>
             <form>
-                <input type="text" id="meta" name="meta" class="form-control" placeholder="Inserire meta" required>
-                <button type="button" id="submit" class="btn btn-black">Cerca</button>
-                <label for="nights">Nights of the stay:</label>
-                <select name="nights" id="nights">
-                </select>
-                <br>
-                <br>
+                <input type="button" id="submit" value="Submit">
             </form>
             <table id="table">
 
             </table>
+            
         </div>
 
         <script>
@@ -58,33 +59,95 @@
             var data = parseJwt(token)
             var startDateGlobal;
             var endDateGlobal;
+            var submit = document.getElementById('submit')
+            var checkbox = document.getElementById('checkbox')
+            var meta = document.getElementById('meta')
+            var table = document.getElementById("table")
+            var tags = new Set()
+            var box;
+            var label;
+            var button;
+            var cityGlobal;
+            var numberOfTags=0;
+            var id = [];
+            var stringTour;
+
+
+            //Carico senza i tag tutti gli alloggi disponibili in quella data
+            //aggiorno anche nome e tag in base agli alloggi trovati, creando già i link per l'approfondimento
+            //dell'alloggio
             window.onload = async function(){
                 const queryString = window.location.search;
                 const urlParams = new URLSearchParams(queryString);
-                var id = urlParams.get('id');
-                var response = fetch('http://localhost:8080/api/v1/', {
-                    method: 'GET',
-                    headers:{
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'Authorization': 'Bearer ' + token
-                    }
-                })
-                const myJson = await response.json();
-                var startDate = myJson.start;
-                var nights = myJson.nights_remaining;
-                var endDate=timeConverter(startDate + nights);
-                startDateGlobal = startDate;
-                endDateGlobal = endDate;
+                var tour = JSON.parse(urlParams.get('tour'));
+                var city = urlParams.get('city');
+                cityGlobal=city;
+                meta.innerText=city;
+                stringTour = window.btoa(JSON.stringify(tour));
+
+
+                var startDate = tour.start*1000;
+                var nights = tour.nights_remaining;
+                var endDate = startDate + (nights*24*60*60*1000);
+                startDateGlobal = Number(startDate);
+                endDateGlobal = Number(endDate);
 
                 var selector = document.getElementById("nights")
-                for(let i=0; i<=nights; i++){
+                for(let i=1; i<=nights; i++){
                     selector.options[selector.options.length] = new Option(i,i);
                 }
-            }
+                var response = await fetch('http://localhost:8080/api/v1/lista-hosting/alloggi', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Authorization': 'Bearer ' + token
+                        },
+                        body: new URLSearchParams({
+                            'start': startDateGlobal,
+                            'end': endDateGlobal,
+                            'city': city,
+                         }),
+                    });
+                    const myJson = await response.json()
+                    console.log(myJson)
+                    myJson.forEach( d => {
 
-            submit.onclick = async function(){
-                document.getElementById("meta");
-                var response = fetch('http://localhost:8080/api/v1/lista-hosting/alloggi', {
+                        var row = table.insertRow(0);
+                        row.onclick = window.location.replace("#")
+                        var cell1 = row.insertCell(0);
+                        console.log(stringTour);
+                        cell1.innerHTML = '<a href="http://localhost:8081/info-alloggio?tourId='+tour._id+'&cityId='+d._id+'&city='+cityGlobal+'&start='+startDateGlobal+'&end='+endDateGlobal+'&host='+d.host+'&address='+d.address+'">'+d.host+'</a>';
+                        console.log(d.tags.length)
+                        for(let i=0; i<d.tags.length ;i++){
+                            tags.add(d.tags[i])
+                        }
+                    })
+                    tags.forEach(tag =>{
+                        //console.log(tag)
+                        //console.log("passato")
+                        label = document.createElement('label')
+                        label.htmlFor = tag;
+                        label.appendChild(document.createTextNode(tag));
+                        checkbox.appendChild(label)
+                        box = document.createElement('input');
+                        box.type = 'checkbox';
+                        box.name = "tag" + numberOfTags;
+                        box.value = tag;
+                        box.id = "tag" + numberOfTags;
+                        numberOfTags=numberOfTags+1
+                        checkbox.appendChild(box);
+                    })  
+                }
+                
+                //Al cliccare del bottone, aggiorno la pagina in base ai filtri
+                submit.onclick = async function(){
+                    const tagArray = []
+                    for(let i=0; i< numberOfTags; i++){
+                        if(document.getElementById('tag'+i).checked){
+                            tagArray.push(document.getElementById('tag'+i).value)
+                        }
+                    }
+                    var response = await fetch('http://localhost:8080/api/v1/lista-hosting/alloggi', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
@@ -93,13 +156,14 @@
                         body:{
                             'start': startDateGlobal,
                             'end': endDateGlobal,
-                            'city': meta.value,
-                            'tags': null,
+                            'city': cityGlobal,
+                            'tags': tagArray,
                         }
                     });
                     const myJson = await response.json();
-                    var table = document.getElementById("table")
-                    data.forEach( d => {
+                    console.log(myJson);
+                    table.innerHTML = ""
+                    myJson.forEach( d => {
                         var row = table.insertRow(0);
                         row.onclick = window.location.replace("#")
                         var cell1 = row.insertCell(0);
