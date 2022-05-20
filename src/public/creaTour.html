@@ -84,6 +84,11 @@
                 var json = JSON.parse(params.get("tour"));
             
                 const addHome = async () => {
+                    if (json.nights_remaining <= 0) {
+                        alert("Non hai più notti a disposizione.");
+                        return;
+                    }
+
                     var city = document.getElementById('newCity').value;
 
                     if (city === "") {
@@ -98,12 +103,39 @@
                 }
 
                 const prenota = async () => {
-                    // TODO: Aggiungere controllo alloggi
-                    
+                    const response = await fetch('http://localhost:8080/api/v1/tour/book', {
+                        method: 'POST',
+                        body: new URLSearchParams({
+                            tour: JSON.stringify(json)
+                        }),
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        }
+                    }
+                    );
+
+                    if(response.status === 200){
+                        console.log("Casa aggiunta con successo");
+
+                        window.location.replace("http://localhost:8081/profilo")
+                    }
+                    else {
+                        alert("Errore durante la prenotazione");
+                    }
                 }
 
                 const moveToDetail = (city) => {
-                    window.location.replace("http://localhost:8081/ricerca?city=" + city + "&tour=" + JSON.stringify(json));
+                    var index = 0;
+                    for (let i = 0; i < json.cities.length; i++) {
+                        if (json.cities[i] == city) {
+                            index = i;
+                            break;
+                        }
+                    }
+
+                    if (city == json.homes[index]) {
+                        window.location.replace("http://localhost:8081/ricerca?city=" + city + "&tour=" + JSON.stringify(json));
+                    }
                 }
 
                 const createCity = (name, index) => {
