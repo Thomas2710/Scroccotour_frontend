@@ -97,6 +97,7 @@
                     }
 
                     json.cities.push(city);
+                    json.homes.push(city);
                     var newJson = JSON.stringify(json);
 
                     window.location.replace("http://localhost:8081/tour?tour=" + newJson);
@@ -133,7 +134,7 @@
                         }
                     }
 
-                    if (city == json.homes[index]) {
+                    if (json.cities.length == 0 || city == json.homes[index]) {
                         window.location.replace("http://localhost:8081/ricerca?city=" + city + "&tour=" + JSON.stringify(json));
                     }
                 }
