@@ -55,15 +55,15 @@
         </div>
 
         <script>
-            var token = getCookie("jwt")
-            var data = parseJwt(token)
+            var token = getCookie("jwt");
+            var data = parseJwt(token);
             var startDateGlobal;
             var endDateGlobal;
-            var submit = document.getElementById('submit')
-            var checkbox = document.getElementById('checkbox')
-            var meta = document.getElementById('meta')
-            var table = document.getElementById("table")
-            var tags = new Set()
+            var submit = document.getElementById('submit');
+            var checkbox = document.getElementById('checkbox');
+            var meta = document.getElementById('meta');
+            var table = document.getElementById("table");
+            var tags = new Set();
             var box;
             var label;
             var button;
@@ -71,6 +71,8 @@
             var numberOfTags=0;
             var id = [];
             var stringTour;
+            var selector;
+            var tour;
 
 
             //Carico senza i tag tutti gli alloggi disponibili in quella data
@@ -79,11 +81,10 @@
             window.onload = async function(){
                 const queryString = window.location.search;
                 const urlParams = new URLSearchParams(queryString);
-                var tour = JSON.parse(urlParams.get('tour'));
+                tour = JSON.parse(urlParams.get('tour'));
                 var city = urlParams.get('city');
                 cityGlobal=city;
                 meta.innerText=city;
-                stringTour = window.btoa(JSON.stringify(tour));
 
 
                 var startDate = tour.start*1000;
@@ -92,7 +93,7 @@
                 startDateGlobal = Number(startDate);
                 endDateGlobal = Number(endDate);
 
-                var selector = document.getElementById("nights")
+                selector = document.getElementById("nights")
                 for(let i=1; i<=nights; i++){
                     selector.options[selector.options.length] = new Option(i,i);
                 }
@@ -109,20 +110,69 @@
                          }),
                     });
                     const myJson = await response.json()
-                    console.log(myJson)
+                    console.log(myJson);
+                    myJson.forEach( d => {
+                        for(let i=0; i<d.tags.length ;i++){
+                            tags.add(d.tags[i])
+                        }
+                        })
+                        tags.forEach(tag =>{
+                        //console.log(tag)
+                        //console.log("passato")
+                        label = document.createElement('label')
+                        label.htmlFor = tag;
+                        label.appendChild(document.createTextNode(tag));
+                        checkbox.appendChild(label)
+                        box = document.createElement('input');
+                        box.type = 'checkbox';
+                        box.name = "tag" + numberOfTags;
+                        box.value = tag;
+                        box.id = "tag" + numberOfTags;
+                        numberOfTags=numberOfTags+1;
+                        checkbox.appendChild(box);
+                        })  
+                }
+                
+                //Al cliccare del bottone, aggiorno la pagina in base ai filtri
+                submit.onclick = async function(){
+                    const tagArray = []
+                    for(let i=0; i< numberOfTags; i++){
+                        if(document.getElementById('tag'+i).checked){
+                            tagArray.push(document.getElementById('tag'+i).value)
+                        }
+                    }
+                    var valore = selector.value;
+                    endDateGlobal = startDateGlobal+ (valore*24*60*60*1000);
+                    console.log(valore);
+                    console.log(endDateGlobal);
+                    console.log(cityGlobal);
+                    console.log(startDateGlobal);
+                    var response = await fetch('http://localhost:8080/api/v1/lista-hosting/alloggi', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Authorization': 'Bearer ' + token
+                        },
+                        body:new URLSearchParams({
+                            'start': startDateGlobal,
+                            'end': endDateGlobal,
+                            'city': cityGlobal,
+                            'tag' : tagArray
+                         }),
+                    });
+                    const myJson = await response.json();
+                    console.log(myJson);
+                    table.innerHTML = "";
+                    checkbox.innerHTML = "";
+                    numberOfTags = 0;
                     myJson.forEach( d => {
 
                         var row = table.insertRow(0);
                         row.onclick = window.location.replace("#")
                         var cell1 = row.insertCell(0);
-                        console.log(stringTour);
                         cell1.innerHTML = '<a href="http://localhost:8081/info-alloggio?tourId='+tour._id+'&cityId='+d._id+'&city='+cityGlobal+'&start='+startDateGlobal+'&end='+endDateGlobal+'&host='+d.host+'&address='+d.address+'">'+d.host+'</a>';
-                        console.log(d.tags.length)
-                        for(let i=0; i<d.tags.length ;i++){
-                            tags.add(d.tags[i])
-                        }
-                    })
-                    tags.forEach(tag =>{
+                        })
+                        tags.forEach(tag =>{
                         //console.log(tag)
                         //console.log("passato")
                         label = document.createElement('label')
@@ -136,40 +186,7 @@
                         box.id = "tag" + numberOfTags;
                         numberOfTags=numberOfTags+1
                         checkbox.appendChild(box);
-                    })  
-                }
-                
-                //Al cliccare del bottone, aggiorno la pagina in base ai filtri
-                submit.onclick = async function(){
-                    const tagArray = []
-                    for(let i=0; i< numberOfTags; i++){
-                        if(document.getElementById('tag'+i).checked){
-                            tagArray.push(document.getElementById('tag'+i).value)
-                        }
-                    }
-                    var response = await fetch('http://localhost:8080/api/v1/lista-hosting/alloggi', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                            'Authorization': 'Bearer ' + token
-                        },
-                        body:{
-                            'start': startDateGlobal,
-                            'end': endDateGlobal,
-                            'city': cityGlobal,
-                            'tags': tagArray,
-                        }
-                    });
-                    const myJson = await response.json();
-                    console.log(myJson);
-                    table.innerHTML = ""
-                    myJson.forEach( d => {
-                        var row = table.insertRow(0);
-                        row.onclick = window.location.replace("#")
-                        var cell1 = row.insertCell(0);
-
-                        cell1.innerHTML = '<a href="#">'+d.host+'</a>';
-                    })
+                        })  
                 }
         </script>
     </body>
