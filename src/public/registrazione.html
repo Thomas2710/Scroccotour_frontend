@@ -126,7 +126,7 @@
                     if (myInput.value === myInputConfirm.value) {
                         document.getElementById("samePws").style.visibility = "visible";
                         document.getElementById("samePws").innerHTML = "<p>Passwords match</p>";
-                        const response = await fetch('http://localhost:8080/api/v1/auth/register', {
+                        const response = await fetch('https://scroccotour-backend.herokuapp.com/api/v1/auth/register', {
                             method: 'POST',
                             credentials: 'include',
                                 body: new URLSearchParams({

@@ -50,7 +50,7 @@
                 <div class="main">
                     <div class="col-md-6 col-sm-12">
                     <div class="login-form">
-                        <form action="http://localhost:8080/api/v1/auth/login" method = "POST">
+                        <form action="https://scroccotour-backend.herokuapp.com/api/v1/auth/login" method = "POST">
                         <div class="form-group">
                             <label>Indirizzo</label>
                             <input type="text" id="address" name="address" class="form-control" placeholder="Via Sommarive, 9" required>
@@ -113,7 +113,7 @@
                         endTimestamp = new Date( endTimestamp[2], endTimestamp[1] - 1, endTimestamp[0]);
                         endTimestamp = endTimestamp.getTime();
 
-                        const response = await fetch('http://localhost:8080/api/v1/home', {
+                        const response = await fetch('https://scroccotour-backend.herokuapp.com/api/v1/home', {
                             method: 'POST',
                             body: new URLSearchParams({
                                 address: address.value,

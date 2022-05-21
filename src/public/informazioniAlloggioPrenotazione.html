@@ -83,7 +83,7 @@
           }
 
           submit.onclick = async function(){
-            var response = await fetch('http://localhost:8080/api/v1/tour/addCity', {
+            var response = await fetch('https://scroccotour-backend.herokuapp.com/api/v1/tour/addCity', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',

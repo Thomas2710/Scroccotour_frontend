@@ -80,7 +80,7 @@
                                 selection = ele[i].value
                         }
                     console.log(selection)
-                    const response = await fetch('http://localhost:8080/api/v1/tour/newtour', {
+                    const response = await fetch('https://scroccotour-backend.herokuapp.com/api/v1/tour/newtour', {
                             method: 'POST',
                             credentials: 'include',
                                 body: new URLSearchParams({
