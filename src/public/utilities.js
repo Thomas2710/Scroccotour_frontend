@@ -1,3 +1,6 @@
+var path = 'http://localhost:8081'
+//var path = 'https://scroccotour-backend.herokuapp.com'
+
 function timeConverter(UNIX_timestamp){
     var a = new Date(UNIX_timestamp * 1000);
     var months = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
