@@ -46,8 +46,9 @@
         <br>
         <label id="host">Host: </label>
         <h3>Recensioni</h3>
-        <script>
-            
+
+
+        <script>    
         var token = getCookie("jwt")
         var data = parseJwt(token)
         var submit = document.getElementById('submit');
@@ -57,6 +58,8 @@
         var fine = document.getElementById('fine');
         var host = document.getElementById('host');
 
+            //Fa una richiesta per recuperare informazioni sull'alloggio, il cui id ci 
+            //è stato passato nella richiesta
             window.onload= async function(){
                 const queryString = window.location.search;
                 const urlParams = new URLSearchParams(queryString);
@@ -71,6 +74,8 @@
             });
             const myJson = await response.json();
             console.log(myJson);
+
+            //Mostro le informazioni che mi ha passato il database
             nomeMeta.innerText = nomeMeta.innerText + myJson.city;
             indirizzo.innerText = indirizzo.innerText + myJson.address;
             var start = timeConverter(myJson.start);

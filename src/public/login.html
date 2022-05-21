@@ -39,6 +39,8 @@
             <script>
                 var username = document.getElementById("username");
                 var psw = document.getElementById("password");
+
+                //Invio i dati al back-end per la validazione
                 submit.onclick = async function(){
                         const response = await fetch('https://scroccotour-backend.herokuapp.com/api/v1/auth/login', {
                             method: 'POST',
@@ -53,6 +55,7 @@
                         }
                         );
                         const myJson = await response.json();
+                        //Se tutto va bene, creo il cookie e reindirizzo
                         if(myJson.success === true){
                            document.cookie="jwt="+myJson.token
                            window.location.replace("https://scroccotour-frontend.herokuapp.com/profilo")

@@ -79,6 +79,7 @@
       <div><h2>I tuoi alloggi</h2></br></div>
       <table id="table" class="table"></table>
       <script>
+          //Recupero tutti i miei alloggi dal back-end
                 var response = fetch('https://scroccotour-backend.herokuapp.com/api/v1/lista-hosting/myalloggi', {
                     method: 'GET',
                     headers: {
@@ -87,7 +88,8 @@
                     }
                     }).then(response=>response.json())
                     .then(data=>{ 
-                    
+                    //Creo una tabella che mostra tutti i miei alloggi, e ci aggiunge il corrispondente
+                    //link per le informazioni
                     var table = document.getElementById("table")
                     data.forEach( d => {
                         var row = table.insertRow(0);

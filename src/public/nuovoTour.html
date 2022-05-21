@@ -69,6 +69,8 @@
             <script>
                 var token = getCookie("jwt")
                 var submit = document.getElementById("sub")
+
+                //Invio al database le informazioni per creare un nuovo tour, sulla base di ciò che l'utente ha inserito
                 submit.onclick = async function (){
                     var start = document.getElementById("start_date")
                     var end  = document.getElementById("end_date")
