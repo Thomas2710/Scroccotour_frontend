@@ -27,7 +27,7 @@ function getCookie(cName) {
         if (val.indexOf(name) === 0) res = val.substring(name.length);
     })
     if(res==undefined){
-        //window.location.replace("http://localhost:8081/login")
+        //window.location.replace("https://scroccotour-frontend.herokuapp.com/login")
     }
    
     return res

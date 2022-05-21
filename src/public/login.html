@@ -32,7 +32,7 @@
                         <button type="button" id="submit" class="btn btn-black">Login</button>
                     </form>
                 </div>
-                <a href="http://localhost:8081/registrazione">Non hai un account? Registrati!</a>
+                <a href="https://scroccotour-frontend.herokuapp.com/registrazione">Non hai un account? Registrati!</a>
              </div>
             </div>
 
@@ -55,7 +55,7 @@
                         const myJson = await response.json();
                         if(myJson.success === true){
                            document.cookie="jwt="+myJson.token
-                           window.location.replace("http://localhost:8081/profilo")
+                           window.location.replace("https://scroccotour-frontend.herokuapp.com/profilo")
                         }
                         else{
                             console.log("error message");

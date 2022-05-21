@@ -29,12 +29,12 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">I tuoi Tour</a></li>
-                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">TopTour</a></li>
-                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Nuovo Tour</a></li>
-                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Profilo</a></li>
-                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Recensioni</a></li>
-                <li onclick="window.location.replace('http://localhost:8081/logout')"><a href="#">Logout</a></li>
+                <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">I tuoi Tour</a></li>
+                <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">TopTour</a></li>
+                <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">Nuovo Tour</a></li>
+                <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">Profilo</a></li>
+                <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">Recensioni</a></li>
+                <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/logout')"><a href="#">Logout</a></li>
             </ul>
             </div>
         </div>
@@ -100,7 +100,7 @@
                     json.homes.push(city);
                     var newJson = JSON.stringify(json);
 
-                    window.location.replace("http://localhost:8081/tour?tour=" + newJson);
+                    window.location.replace("https://scroccotour-frontend.herokuapp.com/tour?tour=" + newJson);
                 }
 
                 const prenota = async () => {
@@ -118,7 +118,7 @@
                     if(response.status === 200){
                         console.log("Casa aggiunta con successo");
 
-                        window.location.replace("http://localhost:8081/profilo")
+                        window.location.replace("https://scroccotour-frontend.herokuapp.com/profilo")
                     }
                     else {
                         alert("Errore durante la prenotazione");
@@ -135,7 +135,7 @@
                     }
 
                     if (json.cities.length == 0 || city == json.homes[index]) {
-                        window.location.replace("http://localhost:8081/ricerca?city=" + city + "&tour=" + JSON.stringify(json));
+                        window.location.replace("https://scroccotour-frontend.herokuapp.com/ricerca?city=" + city + "&tour=" + JSON.stringify(json));
                     }
                 }
 

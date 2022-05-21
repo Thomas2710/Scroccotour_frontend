@@ -25,12 +25,12 @@
               <!-- Collect the nav links, forms, and other content for toggling -->
               <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                  <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">I tuoi Tour</a></li>
-                          <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">TopTour</a></li>
-                          <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Nuovo Tour</a></li>
-                          <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Profilo</a></li>
-                          <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Recensioni</a></li>
-                          <li onclick="window.location.replace('http://localhost:8081/logout')"><a href="#">Logout</a></li>
+                  <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">I tuoi Tour</a></li>
+                          <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">TopTour</a></li>
+                          <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">Nuovo Tour</a></li>
+                          <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">Profilo</a></li>
+                          <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">Recensioni</a></li>
+                          <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/logout')"><a href="#">Logout</a></li>
                 </ul>
               </div>
             </div>
@@ -170,7 +170,7 @@
                         var row = table.insertRow(0);
                         row.onclick = window.location.replace("#")
                         var cell1 = row.insertCell(0);
-                        cell1.innerHTML = '<a href="http://localhost:8081/info-alloggio?tourId='+tour._id+'&cityId='+d._id+'&city='+cityGlobal+'&start='+startDateGlobal+'&end='+endDateGlobal+'&host='+d.host+'&address='+d.address+'">'+d.host+'</a>';
+                        cell1.innerHTML = '<a href="https://scroccotour-frontend.herokuapp.com/info-alloggio?tourId='+tour._id+'&cityId='+d._id+'&city='+cityGlobal+'&start='+startDateGlobal+'&end='+endDateGlobal+'&host='+d.host+'&address='+d.address+'">'+d.host+'</a>';
                         })
                         tags.forEach(tag =>{
                         //console.log(tag)
