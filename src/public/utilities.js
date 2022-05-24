@@ -1,4 +1,5 @@
-var path = 'http://localhost:8081'
+var f_path = 'http://localhost:8081'
+var b_path = 'http://localhost:8080'
 //var path = 'https://scroccotour-backend.herokuapp.com'
 
 //Funzione per convertire il tempo da secondi passati dal 1970 a timestamp

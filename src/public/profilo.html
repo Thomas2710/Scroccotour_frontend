@@ -31,12 +31,12 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">I tuoi Tour</a></li>
-                <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">TopTour</a></li>
-                <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/nuovotour')"><a href="#">Nuovo Tour</a></li>
-                <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">Profilo</a></li>
-                <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">Recensioni</a></li>
-                <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/logout')"><a href="#">Logout</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">I tuoi Tour</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">TopTour</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/nuovotour')"><a href="#">Nuovo Tour</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Profilo</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Recensioni</a></li>
+                <li onclick="window.location.replace('http://localhost:8081/logout')"><a href="#">Logout</a></li>
             </ul>
             </div>
         </div>
@@ -80,7 +80,7 @@
       <table id="table" class="table"></table>
       <script>
           //Recupero tutti i miei alloggi dal back-end
-                var response = fetch('https://scroccotour-backend.herokuapp.com/api/v1/lista-hosting/myalloggi', {
+                var response = fetch(b_path+'/api/v1/lista-hosting/myalloggi', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'text/plain',
@@ -97,7 +97,7 @@
                         var cell1 = row.insertCell(0);
                         var cell2 = row.insertCell(1);
 
-                        cell1.innerHTML = '<a href="https://scroccotour-frontend.herokuapp.com/alloggio?id='+d._id+'">'+d.city+'</a>';
+                        cell1.innerHTML = '<a href="http://localhost:8081/alloggio?id='+d._id+'">'+d.city+'</a>';
                         cell2.innerHTML = d.address
                         
   
@@ -107,7 +107,7 @@
                 
             
     </script>
-    <button onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/home')">Aggiungi alloggio</button>
+    <button onclick="window.location.replace('http://localhost:8081/home')">Aggiungi alloggio</button>
 
 
             
