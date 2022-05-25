@@ -25,12 +25,12 @@
               <!-- Collect the nav links, forms, and other content for toggling -->
               <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                  <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">I tuoi Tour</a></li>
-                          <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">TopTour</a></li>
-                          <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/nuovotour')"><a href="#">Nuovo Tour</a></li>
-                          <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">Profilo</a></li>
-                          <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">Recensioni</a></li>
-                          <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/logout')"><a href="#">Logout</a></li>
+                  <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">I tuoi Tour</a></li>
+                          <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">TopTour</a></li>
+                          <li onclick="window.location.replace('http://localhost:8081/nuovotour')"><a href="#">Nuovo Tour</a></li>
+                          <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Profilo</a></li>
+                          <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Recensioni</a></li>
+                          <li onclick="window.location.replace('http://localhost:8081/logout')"><a href="#">Logout</a></li>
                 </ul>
               </div>
             </div>
@@ -46,8 +46,9 @@
         <br>
         <label id="host">Host: </label>
         <h3>Recensioni</h3>
-        <script>
-            
+
+
+        <script>    
         var token = getCookie("jwt")
         var data = parseJwt(token)
         var submit = document.getElementById('submit');
@@ -57,11 +58,13 @@
         var fine = document.getElementById('fine');
         var host = document.getElementById('host');
 
+            //Fa una richiesta per recuperare informazioni sull'alloggio, il cui id ci 
+            //è stato passato nella richiesta
             window.onload= async function(){
                 const queryString = window.location.search;
                 const urlParams = new URLSearchParams(queryString);
                 var id = urlParams.get('id');
-                const response = await fetch('https://scroccotour-backend.herokuapp.com/api/v1/lista-hosting/dettaglio?id='+id, {
+                const response = await fetch(b_path+'/api/v1/lista-hosting/dettaglio?id='+id, {
                             method: 'GET',
                             credentials: 'include',
                             headers: {
@@ -71,6 +74,8 @@
             });
             const myJson = await response.json();
             console.log(myJson);
+
+            //Mostro le informazioni che mi ha passato il database
             nomeMeta.innerText = nomeMeta.innerText + myJson.city;
             indirizzo.innerText = indirizzo.innerText + myJson.address;
             var start = timeConverter(myJson.start);

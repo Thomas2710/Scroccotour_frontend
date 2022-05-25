@@ -25,12 +25,12 @@
               <!-- Collect the nav links, forms, and other content for toggling -->
               <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                  <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">I tuoi Tour</a></li>
-                          <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">TopTour</a></li>
-                          <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">Nuovo Tour</a></li>
-                          <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">Profilo</a></li>
-                          <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/profilo')"><a href="#">Recensioni</a></li>
-                          <li onclick="window.location.replace('https://scroccotour-frontend.herokuapp.com/logout')"><a href="#">Logout</a></li>
+                  <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">I tuoi Tour</a></li>
+                          <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">TopTour</a></li>
+                          <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Nuovo Tour</a></li>
+                          <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Profilo</a></li>
+                          <li onclick="window.location.replace('http://localhost:8081/profilo')"><a href="#">Recensioni</a></li>
+                          <li onclick="window.location.replace('http://localhost:8081/logout')"><a href="#">Logout</a></li>
                 </ul>
               </div>
             </div>
@@ -46,11 +46,18 @@
 
             </div>
             <form>
+                <input type="button" id="back" value="Go to previous page">
                 <input type="button" id="submit" value="Submit">
             </form>
+            <br>
+            <br>
+            <label id="noItems"></label>
             <table id="table">
 
             </table>
+            <div id = "cards">
+
+            </div>
             
         </div>
 
@@ -59,10 +66,13 @@
             var data = parseJwt(token);
             var startDateGlobal;
             var endDateGlobal;
+            var items = document.getElementById('noItems');
             var submit = document.getElementById('submit');
+            var back = document.getElementById('back');
             var checkbox = document.getElementById('checkbox');
             var meta = document.getElementById('meta');
             var table = document.getElementById("table");
+            var cards = document.getElementById("cards");
             var tags = new Set();
             var box;
             var label;
@@ -97,7 +107,7 @@
                 for(let i=1; i<=nights; i++){
                     selector.options[selector.options.length] = new Option(i,i);
                 }
-                var response = await fetch('https://scroccotour-backend.herokuapp.com/api/v1/lista-hosting/alloggi', {
+                var response = await fetch(b_path+'/api/v1/lista-hosting/alloggi', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
@@ -111,29 +121,35 @@
                     });
                     const myJson = await response.json()
                     console.log(myJson);
-                    myJson.forEach( d => {
-                        for(let i=0; i<d.tags.length ;i++){
-                            tags.add(d.tags[i])
-                        }
-                        })
-                        tags.forEach(tag =>{
-                        //console.log(tag)
-                        //console.log("passato")
-                        label = document.createElement('label')
-                        label.htmlFor = tag;
-                        label.appendChild(document.createTextNode(tag));
-                        checkbox.appendChild(label)
-                        box = document.createElement('input');
-                        box.type = 'checkbox';
-                        box.name = "tag" + numberOfTags;
-                        box.value = tag;
-                        box.id = "tag" + numberOfTags;
-                        numberOfTags=numberOfTags+1;
-                        checkbox.appendChild(box);
-                        })  
+                    //Se non ci sono alloggi in quelle date, lo scrivo
+                    if(myJson.length == 0){
+                        items.innerText = "Non ci sono alloggi per questa meta nelle date inserite"
+                    }
+                    //Se ne ho trovati, prendo tutti i tag da questi alloggi e li mostro nella pagina
+                    //per poter far scegliere i tag agli utenti
+                    else{
+                        myJson.forEach( d => {
+                            for(let i=0; i<d.tags.length ;i++){
+                                tags.add(d.tags[i])
+                            }
+                            })
+                            tags.forEach(tag =>{
+                            label = document.createElement('label')
+                            label.htmlFor = tag;
+                            label.appendChild(document.createTextNode(tag));
+                            checkbox.appendChild(label)
+                            box = document.createElement('input');
+                            box.type = 'checkbox';
+                            box.name = "tag" + numberOfTags;
+                            box.value = tag;
+                            box.id = "tag" + numberOfTags;
+                            numberOfTags=numberOfTags+1;
+                            checkbox.appendChild(box);
+                            })  
+                    }
                 }
                 
-                //Al cliccare del bottone, aggiorno la pagina in base ai filtri
+                //Al cliccare del bottone, aggiorno la pagina in base ai filtri(tag)
                 submit.onclick = async function(){
                     const tagArray = []
                     for(let i=0; i< numberOfTags; i++){
@@ -143,11 +159,7 @@
                     }
                     var valore = selector.value;
                     endDateGlobal = startDateGlobal+ (valore*24*60*60*1000);
-                    console.log(valore);
-                    console.log(endDateGlobal);
-                    console.log(cityGlobal);
-                    console.log(startDateGlobal);
-                    var response = await fetch('https://scroccotour-backend.herokuapp.com/api/v1/lista-hosting/alloggi', {
+                    var response = await fetch(b_path+'/api/v1/lista-hosting/alloggi', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
@@ -165,16 +177,25 @@
                     table.innerHTML = "";
                     checkbox.innerHTML = "";
                     numberOfTags = 0;
-                    myJson.forEach( d => {
 
+                    //Aggiorno e visualizzo gli alloggi disponibili in base ai tag e le notti selezionate
+                    myJson.forEach( d => {
+                        $("#cards").append(`
+                        <div class="card" style="width:18rem;">
+                            <img class="card-img-top" style="max-width:600px;width:100%" src="${d.image}" alt="Card image cap">
+                            <div class="card-body">
+                            <h5 class="card-title"></h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <a href="http://localhost:8081/info-alloggio?tourId='+${tour._id}+'&cityId='+${d._id}+'&city='+${cityGlobal}+'&start='+${startDateGlobal}+'&end='+${endDateGlobal}+'&host='+${d.host}+'&address='+${d.address}+'" class="btn btn-primary">${d.host}</a>
+                            </div>
+                        </div>
+                        `);
                         var row = table.insertRow(0);
                         row.onclick = window.location.replace("#")
                         var cell1 = row.insertCell(0);
-                        cell1.innerHTML = '<a href="https://scroccotour-frontend.herokuapp.com/info-alloggio?tourId='+tour._id+'&cityId='+d._id+'&city='+cityGlobal+'&start='+startDateGlobal+'&end='+endDateGlobal+'&host='+d.host+'&address='+d.address+'">'+d.host+'</a>';
+                        cell1.innerHTML = '<a href="'+f_path+'/info-alloggio?tourId='+tour._id+'&cityId='+d._id+'&city='+cityGlobal+'&start='+startDateGlobal+'&end='+endDateGlobal+'&host='+d.host+'&address='+d.address+'">'+d.host+'</a>';
                         })
                         tags.forEach(tag =>{
-                        //console.log(tag)
-                        //console.log("passato")
                         label = document.createElement('label')
                         label.htmlFor = tag;
                         label.appendChild(document.createTextNode(tag));
@@ -187,6 +208,11 @@
                         numberOfTags=numberOfTags+1
                         checkbox.appendChild(box);
                         })  
+                }
+
+                //Pulsante per tornare alla pagina precedente
+                back.onclick = function(){
+                    window.location.replace(f_path+"/tour?tour=" + urlParams.get('tour'));
                 }
         </script>
     </body>
