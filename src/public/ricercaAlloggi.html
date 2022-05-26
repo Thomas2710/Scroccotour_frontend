@@ -87,7 +87,9 @@
                 cityGlobal=city;
                 meta.innerText=city;
 
-
+                console.log(tour.start);
+                console.log(tour.end);
+                console.log(tour.nights_remaining);
                 var startDate = tour.start*1000;
                 var nights = tour.nights_remaining;
                 var endDate = startDate + (nights*24*60*60*1000);
@@ -178,7 +180,7 @@
                             <div class="card-body">
                             <h5 class="card-title"></h5>
                             <p class="card-text">${d.host}, ${d.address}</p>
-                            <a href="http://localhost:8081/info-alloggio?tourId='+${tour._id}+'&cityId='+${d._id}+'&city='+${cityGlobal}+'&start='+${startDateGlobal}+'&end='+${endDateGlobal}+'&host='+${d.host}+'&address='+${d.address}+'" class="btn btn-primary">Informazioni</a>
+                            <a href="http://localhost:8081/info-alloggio?tourId=${tour._id}&cityId=${d._id}&city=${cityGlobal}&start=${startDateGlobal}&end=${endDateGlobal}&host=${d.host}&address=${d.address}" class="btn btn-primary">Informazioni</a>
                             </div>
                         </div>
                         `);

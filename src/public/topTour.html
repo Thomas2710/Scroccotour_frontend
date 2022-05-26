@@ -56,13 +56,13 @@
                         $("#cards").empty();
                         myJson.forEach( d => {
                             $("#cards").append(`
-                            <div class="card">
+                            <div class="card m-3" >
                                 <div class="card-header">
                                     ${d.name}
                                 </div>
                             <div class="card-body">
                                 <p class="card-text">${d.cities}</p>
-                                <a href="#" class="btn btn-primary">Lmao show me tha tour</a>
+                                <a href="http://localhost:8081/info-tour?id=${d._id}" class="btn btn-primary">Lmao show me tha tour</a>
                             </div>
                             </div>
                             `);

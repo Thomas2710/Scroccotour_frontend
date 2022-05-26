@@ -69,6 +69,10 @@
                 console.log(tourId);
                 city = urlParams.get('city');
 
+                console.log(start);
+                console.log(end);
+                console.log(inizio.innerText);
+                console.log(timeConverter(start/1000))
                 host.innerText = urlParams.get('host');
                 nomeMeta.innerText = city;
                 indirizzo.innerText = indirizzo.innerText + urlParams.get('address');
