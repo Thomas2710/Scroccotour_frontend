@@ -51,6 +51,9 @@ const path = require('path');
   app.get('/topTour', function(req, res) {
     res.sendFile(path.join(__dirname, './public/topTour.html'));
     });
+  app.get('/myTours', function(req, res) {
+    res.sendFile(path.join(__dirname, './public/myTours.html'));
+    });
   app.get('/info-tour', function(req, res) {
     res.sendFile(path.join(__dirname, './public/informazioniTour.html'));
     });

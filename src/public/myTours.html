@@ -9,7 +9,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <!-- JavaScript Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-        <title>Il mio profilo</title>
+        <title>I miei tour</title>
         <script src="/static/utilities.js"></script>
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -20,9 +20,9 @@
               </button>
               <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                  <a class="nav-link active" aria-current="page" href="http://localhost:8081/topTour">Top Tours</a>
+                  <a class="nav-link" href="http://localhost:8081/topTour">Top Tours</a>
                   <a class="nav-link" href="http://localhost:8081/nuovotour">Nuovo Tour</a>
-                  <a class="nav-link" href="http://localhost:8081/myTours">I tuoi tour</a>
+                  <a class="nav-link active" aria-current="page" href="http://localhost:8081/myTours">I tuoi tour</a>
                   <a class="nav-link" href="http://localhost:8081/profilo">Recensioni</a>
                   <a class="nav-link" href="http://localhost:8081/profilo">Profilo</a>
                   <a class="nav-link" href="http://localhost:8081/logout">Logout</a>
@@ -33,12 +33,25 @@
           </nav>
     </head>
     <body>
-        <div class="container" id="cards"></div>
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+              <h3 class="display-4">Upcoming Tours</h3>
+            </div>
+          </div>
+        <div class="container" id="cards-upcoming"></div>
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+              <h3 class="display-4">Completed Tours</h3>
+            </div>
+          </div>
+        <div class="container" id="cards-completed"></div>
+        <div class="container" id="items"></div>
         <script>
-            var token = getCookie("jwt")
-            var data = parseJwt(token)
+            var token = getCookie("jwt");
+            var data = parseJwt(token);
+            
             window.onload = async function(){
-                var response = await fetch(b_path+'/api/v2/tour/topTour', {
+                var response = await fetch(b_path+'/api/v2/tour/myTours', {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
@@ -49,26 +62,39 @@
                     const myJson = await response.json();
                     //Se non ci sono tour, lo scrivo
                     if(myJson.length == 0){
-                        items.innerText = "Non ci sono tour completati, creane uno e diventa il primo tour@taro!"
+                        items.innerText = "Non ci sono tour"
                     }
                     //Se ne ho trovati, li stampo in ordine
                     else{
-                        $("#cards").empty();
+                        $("#cards-completed").empty();
+                        $("#cards-upcoming").empty();
                         myJson.forEach( d => {
-                            $("#cards").append(`
-                            <div class="card m-3" >
-                                <div class="card-header">
-                                    ${d.name}
-                                    <p class="text-end">${d.likes} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-                                    </svg></p>
+                            if(d.completed === 1){
+                                $("#cards-completed").append(`
+                                <div class="card m-3" >
+                                    <div class="card-header">
+                                        ${d.name}
+                                    </div>
+                                <div class="card-body">
+                                    <p class="card-text">${d.cities}</p>
+                                    <a href="http://localhost:8081/info-tour?id=${d._id}" class="btn btn-primary">Lmao show me tha tour</a>
                                 </div>
-                            <div class="card-body">
-                                <p class="card-text">${d.cities}</p>
-                                <a href="http://localhost:8081/info-tour?id=${d._id}" class="btn btn-primary">Lmao show me tha tour</a>
-                            </div>
-                            </div>
-                            `);
+                                </div>
+                                `);
+                            }
+                            else{
+                                $("#cards-upcoming").append(`
+                                <div class="card m-3" >
+                                    <div class="card-header">
+                                        ${d.name}
+                                    </div>
+                                <div class="card-body">
+                                    <p class="card-text">${d.cities}</p>
+                                    <a href="http://localhost:8081/info-tour?id=${d._id}" class="btn btn-primary">Lmao show me tha tour</a>
+                                </div>
+                                </div>
+                                `);
+                            }
                         })
                     }
             }
