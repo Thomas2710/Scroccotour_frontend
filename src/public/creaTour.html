@@ -44,7 +44,7 @@
                         <h1>Informazione generali</h1>
                         <label id="startLabel">Partirai il </label> <br />
                         <label id="meteLabel">Numero di mete: </label> <br />
-                        <label id="lengthLabel">Durata: </label> <br />
+                        <label id="lengthLabel">Notti rimanenti da prenotare: </label> <br />
                         <label id="stateLabel">Stato: </label> <br /> <br />
 
                         <div id="cities">
@@ -150,7 +150,7 @@
                     var stato = json.completed == 0 ? "Bozza" : "Completo";
                     tourId = json._id;
 
-                    document.getElementById("startLabel").innerText += " " + timeConverter(start);
+                    document.getElementById("startLabel").innerText += " " + timeConverter(start*1000);
                     document.getElementById("meteLabel").innerText += " " + mete;
                     document.getElementById("lengthLabel").innerText += " " + json.nights_remaining;
                     document.getElementById("stateLabel").innerText += " " + stato;

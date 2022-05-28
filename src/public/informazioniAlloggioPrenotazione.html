@@ -66,24 +66,19 @@
                 start = urlParams.get('start');
                 end =  urlParams.get('end');
                 tourId = urlParams.get('tourId');
-                console.log(tourId);
                 city = urlParams.get('city');
 
-                console.log(start);
-                console.log(end);
-                console.log(inizio.innerText);
-                console.log(timeConverter(start/1000))
                 host.innerText = urlParams.get('host');
                 nomeMeta.innerText = city;
                 indirizzo.innerText = indirizzo.innerText + urlParams.get('address');
-                inizio.innerText = inizio.innerText + timeConverter(start/1000);
-                fine.innerText = fine.innerText + timeConverter(end/1000);
+                inizio.innerText = inizio.innerText + timeConverter(start);
+                fine.innerText = fine.innerText + timeConverter(end);
           }
 
 
           //Chiama il back-end per per aggiungere questa tappa al tour corrente
           submit.onclick = async function(){
-            var response = await fetch(b_path+'/api/v1/tour/addCity', {
+            var response = await fetch(b_path+'/api/v2/tour/addCity', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
@@ -91,7 +86,7 @@
                         },
                         body: new URLSearchParams({
                             'start': start,
-                            'nights': ((end-start)/1000),
+                            'nights': ((end-start)),
                             'end': end,
                             'city': city,
                             'cityId' : cityId,

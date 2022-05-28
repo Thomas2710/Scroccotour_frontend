@@ -74,6 +74,8 @@
             var selector;
             var tour;
             var urlParams;
+            var inizioMeta;
+            var fineMeta;
 
 
             //Carico senza i tag tutti gli alloggi disponibili in quella data
@@ -86,40 +88,36 @@
                 var city = urlParams.get('city');
                 cityGlobal=city;
                 meta.innerText=city;
-
-                console.log(tour.start);
-                console.log(tour.end);
-                console.log(tour.nights_remaining);
-                var startDate = tour.start*1000;
-                var nights = tour.nights_remaining;
-                var endDate = startDate + (nights*24*60*60*1000);
-                startDateGlobal = Number(startDate);
-                endDateGlobal = Number(endDate);
+                //Partendo dalla data di inizio e fine tour, calcolo i giorni totali del tour
+                //Togliendo i giorni rimanenti, calcolo dunque da quanto è in viaggio il guest
+                //Questo mi dà la data di arrivo nella meta, e sommandoci le notti dello stay
+                inizioMeta = 1000*(tour.start+((tour.end - tour.start)-(tour.nights_remaining*24*60*60)));
+                fineMeta = 1000*(inizioMeta + (tour.nights_remaining*24*60*60));
+                
 
                 selector = document.getElementById("nights")
-                for(let i=1; i<=nights; i++){
+                for(let i=1; i<=tour.nights_remaining; i++){
                     selector.options[selector.options.length] = new Option(i,i);
                 }
-                var response = await fetch(b_path+'/api/v1/lista-hosting/alloggi', {
+                var response = await fetch(b_path+'/api/v2/lista-hosting/alloggi', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
                             'Authorization': 'Bearer ' + token
                         },
                         body: new URLSearchParams({
-                            'start': startDateGlobal,
-                            'end': endDateGlobal,
+                            'start': inizioMeta,
+                            'end': fineMeta,
                             'city': city,
                          }),
                     });
                     const myJson = await response.json()
-                    console.log(myJson);
                     //Se non ci sono alloggi in quelle date, lo scrivo
-                    if(myJson.length == 0){
-                        items.innerText = "Non ci sono alloggi per questa meta nelle date inserite"
-                    }
                     //Se ne ho trovati, prendo tutti i tag da questi alloggi e li mostro nella pagina
                     //per poter far scegliere i tag agli utenti
+                    if(myJson.length==0){
+
+                    }
                     else{
                         myJson.forEach( d => {
                             for(let i=0; i<d.tags.length ;i++){
@@ -151,26 +149,28 @@
                         }
                     }
                     var valore = selector.value;
-                    endDateGlobal = startDateGlobal+ (valore*24*60*60*1000);
-                    var response = await fetch(b_path+'/api/v1/lista-hosting/alloggi', {
+                    fineMeta = inizioMeta + (valore*24*60*60*1000);
+                    var response = await fetch(b_path+'/api/v2/lista-hosting/alloggi', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
                             'Authorization': 'Bearer ' + token
                         },
                         body:new URLSearchParams({
-                            'start': startDateGlobal,
-                            'end': endDateGlobal,
+                            'start': inizioMeta,
+                            'end': fineMeta,
                             'city': cityGlobal,
-                            'tag' : tagArray
+                            'tag' : tagArray,
                          }),
                     });
                     const myJson = await response.json();
-                    console.log(myJson);
+                    items.innerText = "";
+                    if(myJson.length == 0){
+                        items.innerText = "Non ci sono alloggi per questa meta nelle date inserite"
+                    }
                     checkbox.innerHTML = "";
                     numberOfTags = 0;
                     $("#cards").empty();
-                    console.log(startDateGlobal);
                     //Aggiorno e visualizzo gli alloggi disponibili in base ai tag e le notti selezionate
                     myJson.forEach( d => {
                         
@@ -180,7 +180,7 @@
                             <div class="card-body">
                             <h5 class="card-title"></h5>
                             <p class="card-text">${d.host}, ${d.address}</p>
-                            <a href="http://localhost:8081/info-alloggio?tourId=${tour._id}&cityId=${d._id}&city=${cityGlobal}&start=${startDateGlobal}&end=${endDateGlobal}&host=${d.host}&address=${d.address}" class="btn btn-primary">Informazioni</a>
+                            <a href="http://localhost:8081/info-alloggio?tourId=${tour._id}&cityId=${d._id}&city=${cityGlobal}&start=${inizioMeta}&end=${fineMeta}&host=${d.host}&address=${d.address}" class="btn btn-primary">Informazioni</a>
                             </div>
                         </div>
                         `);
