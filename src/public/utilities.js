@@ -5,7 +5,7 @@ var b_path = 'http://localhost:8080'
 
 //Funzione per convertire il tempo da secondi passati dal 1970 a timestamp
 function timeConverter(UNIX_timestamp){
-    var a = new Date(UNIX_timestamp * 1000);
+    var a = new Date(UNIX_timestamp);
     var months = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
     var year = a.getFullYear();
     var month = months[a.getMonth()];
