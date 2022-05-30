@@ -21,11 +21,8 @@
                 <div class="navbar-nav">
                   <a class="nav-link" href="http://localhost:8081/topTour">Top Tours</a>
                   <a class="nav-link active" aria-current="page" href="http://localhost:8081/nuovotour">Nuovo Tour</a>
-
                   <a class="nav-link" href="http://localhost:8081/recensioni">Recensioni</a>
-
                   <a class="nav-link" href="http://localhost:8081/myTours">I tuoi tour</a>
-
                   <a class="nav-link" href="http://localhost:8081/profilo">Profilo</a>
                   <a class="nav-link" href="http://localhost:8081/logout">Logout</a>
                   <!--<a class="nav-link disabled">Disabled</a>-->
@@ -47,7 +44,7 @@
                         <h1>Informazione generali</h1>
                         <label id="startLabel">Partirai il </label> <br />
                         <label id="meteLabel">Numero di mete: </label> <br />
-                        <label id="lengthLabel">Durata: </label> <br />
+                        <label id="lengthLabel">Notti rimanenti da prenotare: </label> <br />
                         <label id="stateLabel">Stato: </label> <br /> <br />
 
                         <div id="cities">
@@ -153,7 +150,7 @@
                     var stato = json.completed == 0 ? "Bozza" : "Completo";
                     tourId = json._id;
 
-                    document.getElementById("startLabel").innerText += " " + timeConverter(start);
+                    document.getElementById("startLabel").innerText += " " + timeConverter(start*1000);
                     document.getElementById("meteLabel").innerText += " " + mete;
                     document.getElementById("lengthLabel").innerText += " " + json.nights_remaining;
                     document.getElementById("stateLabel").innerText += " " + stato;

@@ -23,7 +23,6 @@
                   <a class="nav-link active" aria-current="page" href="http://localhost:8081/topTour">Top Tours</a>
                   <a class="nav-link" href="http://localhost:8081/nuovotour">Nuovo Tour</a>
                   <a class="nav-link" href="http://localhost:8081/recensioni">Recensioni</a>
-
                   <a class="nav-link" href="http://localhost:8081/myTours">I tuoi tour</a>
                   <a class="nav-link" href="http://localhost:8081/profilo">Profilo</a>
                   <a class="nav-link" href="http://localhost:8081/logout">Logout</a>
@@ -34,8 +33,19 @@
           </nav>
     </head>
     <body>
+        <div class="form-group m-3 p-2">
+            <label>Ricerca tour per nome</label>
+            <input type="text" id="tour" name="tour" class="form-control" placeholder="Broccotour" required>
+            <button type="button" id="submit" class="btn btn-black">Search</button>
+        </div>
+        
+        <hr>
+        <div class="container"><label id="items"></label></div>
         <div class="container" id="cards"></div>
+
         <script>
+            var submit = document.getElementById("submit");
+            var tour;
             var token = getCookie("jwt")
             var data = parseJwt(token)
             window.onload = async function(){
@@ -73,6 +83,47 @@
                         })
                     }
             }
+            
+            submit.onclick = async function(){
+                tour = document.getElementById('tour').value;
+                if(tour != ""){
+                    var response = await fetch(b_path+'/api/v2/tour/searchTour?name='+tour, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                'Authorization': 'Bearer ' + token
+                            },
+                        });
+
+                        const myJson = await response.json();
+                        $("#cards").empty();
+                        if(myJson.length == 0){
+                            items.innerText = "Non ci sono tour a nome "+tour;
+                        }
+                        else{
+                            myJson.forEach( d => {
+                                $("#cards").append(`
+                                <div class="card m-3" >
+                                    <div class="card-header">
+                                        ${d.name}
+                                        <p class="text-end">${d.likes} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                                        </svg></p>
+                                    </div>
+                                <div class="card-body">
+                                    <p class="card-text">${d.cities}</p>
+                                    <a href="http://localhost:8081/info-tour?id=${d._id}" class="btn btn-primary">Lmao show me tha tour</a>
+                                </div>
+                                </div>
+                                `);
+                            })
+                        }
+                }
+                else{
+                    window.location.reload();
+                }
+            }
+            
         </script>
     </body>
 </html>
