@@ -119,15 +119,28 @@
                 }
 
                 const moveToDetail = (city) => {
-                    var index = 0;
+                    let index = 0;
+                    let expectedIndex = 0;
+
                     for (let i = 0; i < json.cities.length; i++) {
                         if (json.cities[i] == city) {
                             index = i;
                             break;
-                        }
+                        }                         
                     }
 
-                    if (json.cities.length == 0 || city == json.homes[index]) {
+                    for (let i = 0; i < json.cities.length; i++) {
+                        if (json.cities[i] != json.homes[i]) {
+                            expectedIndex = i + 1;
+                            break;
+                        } 
+                    }
+
+                    if (expectedIndex == json.cities.length) {
+                        expectedIndex = 0;
+                    }
+                    
+                    if (json.cities.length == 0 || (city == json.homes[index] && index == expectedIndex)) {
                         window.location.replace(f_path+"/ricerca?city=" + city + "&tour=" + JSON.stringify(json));
                     }
                 }
