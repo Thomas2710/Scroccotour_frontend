@@ -19,8 +19,10 @@
               <div class="navbar-nav">
                 <a class="nav-link" href="http://localhost:8081/topTour">Top Tours</a>
                 <a class="nav-link active" aria-current="page" href="http://localhost:8081/nuovotour">Nuovo Tour</a>
+
+                <a class="nav-link" href="http://localhost:8081/recensioni">Recensioni</a>
+
                 <a class="nav-link" href="http://localhost:8081/myTours">I tuoi tour</a>
-                <a class="nav-link" href="http://localhost:8081/profilo">Recensioni</a>
                 <a class="nav-link" href="http://localhost:8081/profilo">Profilo</a>
                 <a class="nav-link" href="http://localhost:8081/logout">Logout</a>
                 <!--<a class="nav-link disabled">Disabled</a>-->
@@ -40,7 +42,15 @@
         <br>
         <button type="button" id="submit" class="btn btn-black">Aggiungi alloggio</button>
         </form>
-        <h3>Recensioni</h3>
+        <div class="sidenav">
+          <div class="login-main-text">
+              <h2>Recensioni dell'Alloggio</h2>
+          </div>
+         
+      </div>
+      <div id="cards-host"></div>
+      <table id="table" class="table"></table>
+        
         <script>
             
         var token = getCookie("jwt")
@@ -59,7 +69,7 @@
         var cityId;
         
         //Carica le informazioni dell'alloggio che si trovano nella richiesta, e le visualizza nell'html
-            window.onload= function(){
+            window.onload= async function(){
                 const queryString = window.location.search;
                 const urlParams = new URLSearchParams(queryString);
                 cityId = urlParams.get('cityId');
@@ -71,9 +81,42 @@
                 host.innerText = urlParams.get('host');
                 nomeMeta.innerText = city;
                 indirizzo.innerText = indirizzo.innerText + urlParams.get('address');
-                inizio.innerText = inizio.innerText + timeConverter(start);
-                fine.innerText = fine.innerText + timeConverter(end);
+
+                inizio.innerText = inizio.innerText + timeConverter(start/1000);
+                fine.innerText = fine.innerText + timeConverter(end/1000);
+
+                var r = fetch(b_path+'/api/v1/reviews/getHomeReviews', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                          'Authorization': 'Bearer ' + token
+                      },
+                      body:new URLSearchParams({
+                            'id': urlParams.get('cityId')
+                         }),
+                      }).then(response=>response.json())
+                      .then(data=>{ 
+                      //Creo una tabella che mostra tutti i miei alloggi, e ci aggiunge il corrispondente
+                      //link per le informazioni
+                      $("#cards-host").empty();
+                      var table = document.getElementById("table")
+                      data.forEach( d => {
+                          $("#cards-host").append(`
+                          <div class="card">
+                          <div class="card-body">
+                              <p class="card-text">Recensione di: <b>${d.da}</b> , Voto: ${d.generale}/5</p><p>${d.commento}<p>
+                          </div>
+                          </div>
+                          `);
+   
+                      })
+                      })
+                   
           }
+          const queryString = window.location.search;
+          const urlParams = new URLSearchParams(queryString);
+          console.log(urlParams.get('cityId'))
+          
 
 
           //Chiama il back-end per per aggiungere questa tappa al tour corrente
@@ -94,6 +137,8 @@
                          }),
                     });
             const myJson = await response.json();
+
+            
             //Se il tour è stato aggiornato correttamente, torno alla pagina iniziale del tour
             if(response.status === 200){
               window.location.replace(f_path+"/tour?tour=" + JSON.stringify(myJson));

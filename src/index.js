@@ -44,9 +44,22 @@ const path = require('path');
     res.sendFile(path.join(__dirname, './public/ricercaAlloggi.html'));
   });
   
-  app.get('/nuovotour', function(req, res) {
-    res.sendFile(path.join(__dirname, './public/nuovoTour.html'));
-    });
+
+app.get('/nuovotour', function(req, res) {
+  res.sendFile(path.join(__dirname, './public/nuovoTour.html'));
+  });
+
+app.get('/recensionehost', function(req, res) {
+  res.sendFile(path.join(__dirname, './public/recensioneHost.html'));
+  });
+
+app.get('/recensioneguest', function(req, res) {
+  res.sendFile(path.join(__dirname, './public/recensioneGuest.html'));
+  });
+app.get('/recensioni', function(req, res) {
+  res.sendFile(path.join(__dirname, './public/recensioni.html'));
+  });
+
 
   app.get('/topTour', function(req, res) {
     res.sendFile(path.join(__dirname, './public/topTour.html'));
@@ -57,6 +70,7 @@ const path = require('path');
   app.get('/info-tour', function(req, res) {
     res.sendFile(path.join(__dirname, './public/informazioniTour.html'));
     });
+
 //app.use('/static', express.static('public'));
 app.listen(process.env.PORT || 8081, '0.0.0.0', () => {
     console.log(`Scroccotour UI server started`);
