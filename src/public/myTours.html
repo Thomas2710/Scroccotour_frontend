@@ -23,7 +23,7 @@
                   <a class="nav-link" href="http://localhost:8081/topTour">Top Tours</a>
                   <a class="nav-link" href="http://localhost:8081/nuovotour">Nuovo Tour</a>
                   <a class="nav-link active" aria-current="page" href="http://localhost:8081/myTours">I tuoi tour</a>
-                  <a class="nav-link" href="http://localhost:8081/profilo">Recensioni</a>
+                  <a class="nav-link" href="http://localhost:8081/recensioni">Recensioni</a>
                   <a class="nav-link" href="http://localhost:8081/profilo">Profilo</a>
                   <a class="nav-link" href="http://localhost:8081/logout">Logout</a>
                   <!--<a class="nav-link disabled">Disabled</a>-->
@@ -33,6 +33,12 @@
           </nav>
     </head>
     <body>
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+              <h3 class="display-4">Drafts</h3>
+            </div>
+          </div>
+        <div class="container" id="cards-drafts"></div>
         <div class="jumbotron jumbotron-fluid">
             <div class="container">
               <h3 class="display-4">Upcoming Tours</h3>
@@ -49,6 +55,9 @@
         <script>
             var token = getCookie("jwt");
             var data = parseJwt(token);
+            var cards_completed = document.getElementById("cards-completed");
+            var cards_upcoming = document.getElementById("cards-upcoming");
+            var cards_drafts = document.getElementById("cards-drafts");
             
             window.onload = async function(){
                 var response = await fetch(b_path+'/api/v2/tour/myTours', {
@@ -68,8 +77,22 @@
                     else{
                         $("#cards-completed").empty();
                         $("#cards-upcoming").empty();
+                        $("#cards-drafts").empty();
                         myJson.forEach( d => {
-                            if(d.completed === 1){
+                            if(d.booked === 0){
+                                $("#cards-drafts").append(`
+                                <div class="card m-3" >
+                                    <div class="card-header">
+                                        ${d.name}
+                                    </div>
+                                <div class="card-body">
+                                    <p class="card-text">${d.cities}</p>
+                                    <a href="http://localhost:8081/info-tour?id=${d._id}" class="btn btn-primary">Lmao show me tha tour</a>
+                                </div>
+                                </div>
+                                `);
+                            }
+                            else if(d.completed === 1 && d.booked === 1){
                                 $("#cards-completed").append(`
                                 <div class="card m-3" >
                                     <div class="card-header">
@@ -82,7 +105,7 @@
                                 </div>
                                 `);
                             }
-                            else{
+                            else if(d.completed === 0 && d.booked === 1){
                                 $("#cards-upcoming").append(`
                                 <div class="card m-3" >
                                     <div class="card-header">
@@ -97,6 +120,16 @@
                             }
                         })
                     }
+                if(cards_completed.innerText==""){
+                    cards_completed.innerText += "Non ci sono tour completati a tuo nome"
+                }
+                if(cards_upcoming.innerText==""){
+                    cards_upcoming.innerText += "Non ci sono tour in programma"
+                }
+                if(cards_drafts.innerText==""){
+                    cards_drafts.innerText += "Non ci sono tour in bozza"
+                }
+
             }
         </script>
     </body>
