@@ -69,6 +69,9 @@
                         $("#cards-completed").empty();
                         $("#cards-upcoming").empty();
                         myJson.forEach( d => {
+                            tourStr = encodeURI(JSON.stringify(d));
+                            console.log(tourStr)
+                            
                             if(d.completed === 1){
                                 $("#cards-completed").append(`
                                 <div class="card m-3" >
@@ -78,6 +81,7 @@
                                 <div class="card-body">
                                     <p class="card-text">${d.cities}</p>
                                     <a href="http://localhost:8081/info-tour?id=${d._id}" class="btn btn-primary">Lmao show me tha tour</a>
+                                    <button type="button" id="edit" onclick="editTour('${tourStr}')" class="btn btn-secondary">Modifica</button>
                                 </div>
                                 </div>
                                 `);
@@ -91,12 +95,32 @@
                                 <div class="card-body">
                                     <p class="card-text">${d.cities}</p>
                                     <a href="http://localhost:8081/info-tour?id=${d._id}" class="btn btn-primary">Lmao show me tha tour</a>
+                                    <button type="button" id="edit" onclick="editTour('${tourStr}')" class="btn btn-secondary">Modifica</button>
                                 </div>
                                 </div>
                                 `);
                             }
                         })
                     }
+            }
+
+            function editTour(tour) {
+                // change tour so that it can be edited
+                let json = JSON.parse(decodeURIComponent(tour));
+
+                if (json.completed) {
+                    alert("Non puoi cambiare un tour già completato");
+                    return;
+                }
+
+                json.cities = [];
+                json.homes = [];
+                json.dates = [];
+                json.nigths_remaining = (json.end - json.start) / (60*60*24);
+
+                const newTourStr = encodeURI(JSON.stringify(json));
+
+                window.location.replace(f_path + "/tour?tour=" + newTourStr)
             }
         </script>
     </body>
