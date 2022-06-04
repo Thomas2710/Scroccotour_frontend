@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html><!--Navbar-->
+
+<head>
+       
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <script src="/static/utilities.js"></script>
+   <title>Il mio profilo</title>
+
+   <nav class="navbar navbar-expand-lg navbar-light bg-light">
+     <div class="container-fluid">
+       <a class="navbar-brand" href="#">Scroccotour</a>
+       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+       </button>
+       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+         <div class="navbar-nav">
+           <a class="nav-link" href="http://localhost:8081/topTour">Top Tours</a>
+           <a class="nav-link" href="http://localhost:8081/nuovotour">Nuovo Tour</a>
+           <a class="nav-link" href="http://localhost:8081/profilo">I tuoi tour</a>
+           <a class="nav-link active" href="http://localhost:8081/recensioni">Recensioni</a>
+           <a class="nav-link" aria-current="page" href="http://localhost:8081/profilo">Profilo</a>
+           <a class="nav-link" href="http://localhost:8081/logout">Logout</a>
+           <!--<a class="nav-link disabled">Disabled</a>-->
+         </div>
+       </div>
+     </div>
+   </nav>
+</head>
+    <body>
+    <script src="/static/utilities.js"></script>
+      <script>
+
+        var token = getCookie("jwt")
+        var data = parseJwt(token)
+      </script>
+      
+
+      <div class="container">
+        <div class="sidenav">
+            <div class="login-main-text">
+                <h2>Host da recensire</h2>
+            </div>
+           
+        </div>
+        <div id="cards-host"></div>
+        <table id="table" class="table"></table>
+        <script>
+            //Recupero tutti i miei alloggi dal back-end
+                  var response = fetch(b_path+'/api/v1/reviews/getHostToReview', {
+                      method: 'GET',
+                      headers: {
+                          'Content-Type': 'text/plain',
+                          'Authorization': 'Bearer ' + token
+                      }
+                      }).then(response=>response.json())
+                      .then(data=>{ 
+                      //Creo una tabella che mostra tutti i miei alloggi, e ci aggiunge il corrispondente
+                      //link per le informazioni
+                      $("#cards-host").empty();
+                      var table = document.getElementById("table")
+                      data.forEach( d => {
+                          $("#cards-host").append(`
+                          <div class="card">
+                          <div class="card-body">
+                              <a href="http://localhost:8081/recensionehost?host=${d.host}&home=${d.city}">${d.host}</a>
+                              <p class="card-text">Recensisci il tuo soggiorno a ${d.city}</p>
+                          </div>
+                          </div>
+                          `);
+   
+                      })
+                      })
+        </script>
+       
+        <div class="sidenav">
+            <div class="login-main-text">
+                <h2>Guest da recensire</h2>
+            </div>
+           
+        </div>
+        <div id="cards-guest"></div>
+        <table id="table" class="table"></table>
+        <script>
+            //Recupero tutti i miei alloggi dal back-end
+                  var response = fetch(b_path+'/api/v1/reviews/getGuestToReview', {
+                      method: 'GET',
+                      headers: {
+                          'Content-Type': 'text/plain',
+                          'Authorization': 'Bearer ' + token
+                      }
+                      }).then(response=>response.json())
+                      .then(data=>{ 
+                      //Creo una tabella che mostra tutti i miei alloggi, e ci aggiunge il corrispondente
+                      //link per le informazioni
+                      $("#cards-host").empty();
+                      var table = document.getElementById("table")
+                      data.forEach( d => {
+                          $("#cards-guest").append(`
+                          <div class="card">
+                          <div class="card-body">
+                              <a href="http://localhost:8081/recensioneguest?guest=${d}">${d}</a>
+                              <p class="card-text">Recensisci la permanenza di ${d}</p>
+                          </div>
+                          </div>
+                          `);
+   
+                      })
+                      })
+        </script>
+        <div class="sidenav">
+            <div class="login-main-text">
+                <h2>Le tue recensioni da Host</h2>
+            </div>
+           
+        </div>
+        <div id="cards-host-review"></div>
+        <table id="table" class="table"></table>
+        <script>
+            //Recupero tutti i miei alloggi dal back-end
+                  var response = fetch(b_path+'/api/v1/reviews/getreviewsashost', {
+                      method: 'GET',
+                      headers: {
+                          'Content-Type': 'text/plain',
+                          'Authorization': 'Bearer ' + token
+                      }
+                      }).then(response=>response.json())
+                      .then(data=>{ 
+                      //Creo una tabella che mostra tutti i miei alloggi, e ci aggiunge il corrispondente
+                      //link per le informazioni
+                      $("#cards-guest").empty();
+                      data.forEach( d => {
+                          $("#cards-host-review").append(`
+                          <div class="card">
+                          <div class="card-body">
+                            ${d.da} <br>Voto: ${d.generale}/5 
+                              <p class="card-text">${d.commento}</p>
+                          </div>
+                          </div>
+                          `);
+   
+                      })
+                      })
+        </script>
+        <div class="sidenav">
+            <div class="login-main-text">
+                <h2>Le tue recensioni da Guest</h2>
+            </div>
+           
+        </div>
+        <div id="cards-guest-review"></div>
+        <table id="table" class="table"></table>
+        <script>
+            //Recupero tutti i miei alloggi dal back-end
+                  var response = fetch(b_path+'/api/v1/reviews/getreviewsasguest', {
+                      method: 'GET',
+                      headers: {
+                          'Content-Type': 'text/plain',
+                          'Authorization': 'Bearer ' + token
+                      }
+                      }).then(response=>response.json())
+                      .then(data=>{ 
+                      //Creo una tabella che mostra tutti i miei alloggi, e ci aggiunge il corrispondente
+                      //link per le informazioni
+                      $("#cards-guest-review").empty();
+                      data.forEach( d => {
+                          $("#cards-guest-review").append(`
+                          <div class="card">
+                          <div class="card-body">
+                            ${d.da} <br>Voto: ${d.generale}/5 
+                              <p class="card-text">${d.commento}</p>
+                          </div>
+                          </div>
+                          `);
+   
+                      })
+                      })
+        </script>
+    </div>
+
+    
+      
+      
+            
+    </body>
+</html>

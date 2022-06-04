@@ -1,40 +1,33 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
+        <!-- CSS only -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
         <!-- jQuery library -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-        <!-- Latest compiled JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <!-- JavaScript Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
         <script src="/static/utilities.js"></script>
         <title>Pagina di dettaglio alloggio</title>
-        <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-            <div class="container">
-              <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                              <span class="sr-only">Toggle navigation</span>
-                              <span class="icon-bar"></span>
-                              <span class="icon-bar"></span>
-                              <span class="icon-bar"></span>
-                          </button>
-              </div>
-          
-              <!-- Collect the nav links, forms, and other content for toggling -->
-              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                  <li onclick="window.location.replace('${f_path}/profilo')"><a href="#">I tuoi Tour</a></li>
-                          <li onclick="window.location.replace('${f_path}/profilo')"><a href="#">TopTour</a></li>
-                          <li onclick="window.location.replace('${f_path}/nuovotour')"><a href="#">Nuovo Tour</a></li>
-                          <li onclick="window.location.replace('${f_path}/profilo')"><a href="#">Profilo</a></li>
-                          <li onclick="window.location.replace('${f_path}/profilo')"><a href="#">Recensioni</a></li>
-                          <li onclick="window.location.replace('${f_path}/logout')"><a href="#">Logout</a></li>
-                </ul>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="#">Scroccotour</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav">
+                <a class="nav-link" href="http://localhost:8081/topTour">Top Tours</a>
+                <a class="nav-link active" aria-current="page" href="http://localhost:8081/nuovotour">Nuovo Tour</a>
+                <a class="nav-link" href="http://localhost:8081/myTours">I tuoi tour</a>
+                <a class="nav-link" href="http://localhost:8081/recensioni">Recensioni</a>
+                <a class="nav-link" href="http://localhost:8081/profilo">Profilo</a>
+                <a class="nav-link" href="http://localhost:8081/logout">Logout</a>
+                <!--<a class="nav-link disabled">Disabled</a>-->
               </div>
             </div>
-          </nav>
+          </div>
+        </nav>
     </head>
     <body>
         <h2>Alloggio a <label id="nomeMeta"></label> da <label id="host"></label></h2>
@@ -47,7 +40,15 @@
         <br>
         <button type="button" id="submit" class="btn btn-black">Aggiungi alloggio</button>
         </form>
-        <h3>Recensioni</h3>
+        <div class="sidenav">
+          <div class="login-main-text">
+              <h2>Recensioni dell'Alloggio</h2>
+          </div>
+         
+      </div>
+      <div id="cards-host"></div>
+      <table id="table" class="table"></table>
+        
         <script>
             
         var token = getCookie("jwt")
@@ -66,27 +67,59 @@
         var cityId;
         
         //Carica le informazioni dell'alloggio che si trovano nella richiesta, e le visualizza nell'html
-            window.onload= function(){
+            window.onload= async function(){
                 const queryString = window.location.search;
                 const urlParams = new URLSearchParams(queryString);
                 cityId = urlParams.get('cityId');
                 start = urlParams.get('start');
                 end =  urlParams.get('end');
                 tourId = urlParams.get('tourId');
-                console.log(tourId);
                 city = urlParams.get('city');
 
                 host.innerText = urlParams.get('host');
                 nomeMeta.innerText = city;
                 indirizzo.innerText = indirizzo.innerText + urlParams.get('address');
+
                 inizio.innerText = inizio.innerText + timeConverter(start/1000);
                 fine.innerText = fine.innerText + timeConverter(end/1000);
+
+                var r = fetch(b_path+'/api/v1/reviews/getHomeReviews', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                          'Authorization': 'Bearer ' + token
+                      },
+                      body:new URLSearchParams({
+                            'id': urlParams.get('cityId')
+                         }),
+                      }).then(response=>response.json())
+                      .then(data=>{ 
+                      //Creo una tabella che mostra tutti i miei alloggi, e ci aggiunge il corrispondente
+                      //link per le informazioni
+                      $("#cards-host").empty();
+                      var table = document.getElementById("table")
+                      data.forEach( d => {
+                          $("#cards-host").append(`
+                          <div class="card">
+                          <div class="card-body">
+                              <p class="card-text">Recensione di: <b>${d.da}</b> , Voto: ${d.generale}/5</p><p>${d.commento}<p>
+                          </div>
+                          </div>
+                          `);
+   
+                      })
+                      })
+                   
           }
+          const queryString = window.location.search;
+          const urlParams = new URLSearchParams(queryString);
+          console.log(urlParams.get('cityId'))
+          
 
 
           //Chiama il back-end per per aggiungere questa tappa al tour corrente
           submit.onclick = async function(){
-            var response = await fetch(b_path+'/api/v1/tour/addCity', {
+            var response = await fetch(b_path+'/api/v2/tour/addCity', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
@@ -94,7 +127,7 @@
                         },
                         body: new URLSearchParams({
                             'start': start,
-                            'nights': ((end-start)/1000),
+                            'nights': ((end-start)),
                             'end': end,
                             'city': city,
                             'cityId' : cityId,
@@ -102,6 +135,8 @@
                          }),
                     });
             const myJson = await response.json();
+
+            
             //Se il tour è stato aggiornato correttamente, torno alla pagina iniziale del tour
             if(response.status === 200){
               window.location.replace(f_path+"/tour?tour=" + JSON.stringify(myJson));
