@@ -97,7 +97,7 @@
 
                 //Manda al back-end la conferma di prenotare tutto il tour, in quanto l'organizzazione è finita
                 const prenota = async () => {
-                    const response = await fetch(b_path+'/api/v1/tour/book', {
+                    const response = await fetch(b_path+'/api/v2/tour/book', {
                         method: 'POST',
                         body: new URLSearchParams({
                             tour: JSON.stringify(json)
