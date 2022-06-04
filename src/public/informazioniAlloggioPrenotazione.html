@@ -80,8 +80,8 @@
                 nomeMeta.innerText = city;
                 indirizzo.innerText = indirizzo.innerText + urlParams.get('address');
 
-                inizio.innerText = inizio.innerText + timeConverter(start/1000);
-                fine.innerText = fine.innerText + timeConverter(end/1000);
+                inizio.innerText = inizio.innerText + timeConverter(start);
+                fine.innerText = fine.innerText + timeConverter(end);
 
                 var r = fetch(b_path+'/api/v1/reviews/getHomeReviews', {
                       method: 'POST',
