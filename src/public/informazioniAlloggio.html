@@ -45,6 +45,7 @@
             </div>
            
         </div>
+        <div id="cards-bookings"></div>
         <div id="cards-host"></div>
         <table id="table" class="table"></table>
         
@@ -77,8 +78,8 @@
                 
             });
             const myJson = await response.json();
-            console.log(myJson);
-
+            //console.log(myJson);
+            
              var r = fetch(b_path+'/api/v1/reviews/getHomeReviews', {
                       method: 'POST',
                       headers: {
@@ -105,6 +106,29 @@
    
                       })
                       })
+              
+              var r_prenotazioni = await fetch(b_path+'/api/v2/lista-hosting/listaPrenotazioni?id='+id, {
+                method: 'GET',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded',
+                          'Authorization': 'Bearer ' + token
+                      },
+              });
+              const prenotazioni= await r_prenotazioni.json();
+              console.log(prenotazioni);
+              $("#cards-bookings").empty();
+              prenotazioni.bookings.forEach( d => {
+                                $("#cards-bookings").append(`
+                                <div class="card m-3" >
+                                    <div class="card-header">
+                                        ${d.guest}
+                                    </div>
+                                <div class="card-body">
+                                    <p class="card-text">From: ${d.start}</p>
+                                    <p class="card-text">To: ${d.end} </p>
+                                </div>
+                                </div>
+                                `);
+                            })
 
             //Mostro le informazioni che mi ha passato il database
             nomeMeta.innerText = nomeMeta.innerText + myJson.city;
