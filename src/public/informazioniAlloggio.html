@@ -79,7 +79,7 @@
             });
             const myJson = await response.json();
             //console.log(myJson);
-            
+            /*
              var r = fetch(b_path+'/api/v1/reviews/getHomeReviews', {
                       method: 'POST',
                       headers: {
@@ -106,15 +106,15 @@
    
                       })
                       })
+                      */
               
-              var r_prenotazioni = await fetch(b_path+'/api/v2/lista-hosting/listaPrenotazioni?id='+id, {
+              var r_prenotazioni = await fetch(b_path+'/api/v2/home/listaPrenotazioni?id='+id, {
                 method: 'GET',
                 headers: {'Content-Type': 'application/x-www-form-urlencoded',
                           'Authorization': 'Bearer ' + token
                       },
               });
               const prenotazioni= await r_prenotazioni.json();
-              console.log(prenotazioni);
               $("#cards-bookings").empty();
               prenotazioni.bookings.forEach( d => {
                                 $("#cards-bookings").append(`
@@ -123,8 +123,8 @@
                                         ${d.guest}
                                     </div>
                                 <div class="card-body">
-                                    <p class="card-text">From: ${d.start}</p>
-                                    <p class="card-text">To: ${d.end} </p>
+                                    <p class="card-text">From: ${timeConverter(d.start*1000)}</p>
+                                    <p class="card-text">To: ${timeConverter(d.end*1000)} </p>
                                 </div>
                                 </div>
                                 `);
