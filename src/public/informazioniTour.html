@@ -67,7 +67,7 @@
         <ul class="list-group list-group-flush" id="cities">
         </ul>
         <div class = "justify-content-center">
-        <button type="button" id="submit" class="btn btn-secondary">Copia tour</button>
+        <button type="button" onclick="copyTour()" class="btn btn-secondary">Copia tour</button>
         </div>
       </div>
       
@@ -84,6 +84,27 @@
             var tourId;
             var token = getCookie("jwt");
             var data = parseJwt(token);
+
+            async function copyTour() {
+                const response = await fetch(b_path+'/api/v2/tour/copy', {
+                        method: 'POST',
+                        body: new URLSearchParams({
+                            tourId: tourId,
+                        }),
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        },
+                    })
+
+                if (response.status === 200) {
+                    const json = await response.json();
+                    const jsonStr = JSON.stringify(json);
+
+                    window.location.replace(f_path + "/tour?tour=" + jsonStr);
+                } else {
+                    alert("Errore durante la creazione della copia del tour");
+                }
+            }
             
             window.onload= async function(){
                 const queryString = window.location.search;
