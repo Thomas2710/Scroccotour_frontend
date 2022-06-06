@@ -99,17 +99,11 @@
                 for(let i=1; i<=tour.nights_remaining; i++){
                     selector.options[selector.options.length] = new Option(i,i);
                 }
-                var response = await fetch(b_path+'/api/v2/lista-hosting/alloggi', {
-                        method: 'POST',
+                var response = await fetch(b_path+'/api/v2/lista-hosting/alloggi?start='+inizioMeta+'&end='+fineMeta+'&city='+cityGlobal, {
+                        method: 'GET',
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
                             'Authorization': 'Bearer ' + token
-                        },
-                        body: new URLSearchParams({
-                            'start': inizioMeta,
-                            'end': fineMeta,
-                            'city': city,
-                         }),
+                        }
                     });
                     const myJson = await response.json()
                     //Se non ci sono alloggi in quelle date, lo scrivo
@@ -150,18 +144,12 @@
                     }
                     var valore = selector.value;
                     fineMeta = inizioMeta + (valore*24*60*60*1000);
-                    var response = await fetch(b_path+'/api/v2/lista-hosting/alloggi', {
-                        method: 'POST',
+                    var response = await fetch(b_path+'/api/v2/lista-hosting/alloggi?start='+inizioMeta+'&end='+fineMeta+'&city='+cityGlobal+'&tag='+tagArray, {
+                        method: 'GET',
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
                             'Authorization': 'Bearer ' + token
-                        },
-                        body:new URLSearchParams({
-                            'start': inizioMeta,
-                            'end': fineMeta,
-                            'city': cityGlobal,
-                            'tag' : tagArray,
-                         }),
+                        }
+                        
                     });
                     const myJson = await response.json();
                     items.innerText = "";

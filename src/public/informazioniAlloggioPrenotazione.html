@@ -82,16 +82,13 @@
 
                 inizio.innerText = inizio.innerText + timeConverter(start);
                 fine.innerText = fine.innerText + timeConverter(end);
-
-                var r = fetch(b_path+'/api/v1/reviews/getHomeReviews', {
-                      method: 'POST',
+                var r = fetch(b_path+'/api/v1/reviews/getHomeReviews?id='+urlParams.get('cityId'), {
+                      method: 'GET',
                       headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                           'Authorization': 'Bearer ' + token
-                      },
-                      body:new URLSearchParams({
-                            'id': urlParams.get('cityId')
-                         }),
+                      }
+                      
                       }).then(response=>response.json())
                       .then(data=>{ 
                       //Creo una tabella che mostra tutti i miei alloggi, e ci aggiunge il corrispondente
