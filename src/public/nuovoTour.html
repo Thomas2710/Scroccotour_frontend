@@ -20,12 +20,12 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div class="navbar-nav">
-                <a class="nav-link" href="http://localhost:8081/topTour">Top Tours</a>
-                <a class="nav-link active" aria-current="page" href="http://localhost:8081/nuovotour">Nuovo Tour</a>
-                <a class="nav-link" href="http://localhost:8081/myTours">I tuoi tour</a>
-                <a class="nav-link" href="http://localhost:8081/recensioni">Recensioni</a>
-                <a class="nav-link" href="http://localhost:8081/profilo">Profilo</a>
-                <a class="nav-link" href="http://localhost:8081/logout">Logout</a>
+                <a class="nav-link" href="https://scroccotour-frontend.herokuapp.com/topTour">Top Tours</a>
+                <a class="nav-link active" aria-current="page" href="https://scroccotour-frontend.herokuapp.com/nuovotour">Nuovo Tour</a>
+                <a class="nav-link" href="https://scroccotour-frontend.herokuapp.com/myTours">I tuoi tour</a>
+                <a class="nav-link" href="https://scroccotour-frontend.herokuapp.com/recensioni">Recensioni</a>
+                <a class="nav-link" href="https://scroccotour-frontend.herokuapp.com/profilo">Profilo</a>
+                <a class="nav-link" href="https://scroccotour-frontend.herokuapp.com/logout">Logout</a>
                 <!--<a class="nav-link disabled">Disabled</a>-->
               </div>
             </div>
@@ -40,20 +40,27 @@
         var data = parseJwt(token)
         
       </script>
-      <div class="sidenav">
-        <div class="login-main-text">
-            <h2>Crea un nuovo Tour <label id="kok"></label></h2>
+      <div class="container">
+        <div class="sidenav">
+            <div class="login-main-text">
+                <h2>Crea un nuovo Tour</h2>
+            </div>
+        </div>
+      
+        <div class="main">
+          <div class="col-md-6 col-sm-12">
             <label> Inizio del Tour</label>
             <input type="date" id="start_date"></br>
             <label> Fine del Tour</label>
             <input type="date" id="end_date"></br>
             <label>Numero di partecipanti</label>
-            <input type="number" id="people" min=1 max=5></br>
-            <input type="radio" value="manuale" name="tipo" >  Nuovo Tour manuale</input></br>
-            <input type="radio" value="toptour" name="tipo" >  Top Tour</input></br>
-            <input type="radio" value="randomtour" name="tipo">    Random Tour</input></br>
-            <input type="submit" id="sub"></br>
+            <input type="number" id="people" min=1 max=5 required></br>
+            <input type="radio" value="manuale" name="tipo" class="form-check-input" required >  Nuovo Tour manuale</input></br>
+            <input type="radio" value="toptour" name="tipo" class="form-check-input" required>  Top Tour</input></br>
+            <input type="radio" value="randomtour" name="tipo" class="form-check-input" required>    Random Tour</input></br>
+            <input type="submit" id="sub" class="btn btn-black"></br>
             <script src="/static/utilities.js"></script>
+          </div>
       
             <script>
                 var token = getCookie("jwt")
@@ -61,10 +68,15 @@
 
                 //Invio al database le informazioni per creare un nuovo tour, sulla base di ciò che l'utente ha inserito
                 submit.onclick = async function (){
+
                     var start = document.getElementById("start_date")
                     var end  = document.getElementById("end_date")
                     var people  = document.getElementById("people")
                     var ele = document.getElementsByName('tipo');
+                    if (start.value == "" || end.value == "" || people.value == "" || ele.value == ""){
+                      window.alert("Compila tutti i campi prima di continuare")
+                      return 
+                    }
                     var selection = "randomtour"
                         for(i = 0; i < ele.length; i++) {
                             if(ele[i].checked)
@@ -91,10 +103,12 @@
                     var redirect = f_path+"/tour?tour=" + stringson
                     window.location.replace(redirect)
                 }
-
+                
 
             </script>
             </form>
+
+            </div>
         </div>
       
 

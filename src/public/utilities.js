@@ -1,5 +1,5 @@
-var f_path = 'http://localhost:8081'
-var b_path = 'http://localhost:8080'
+var f_path = 'https://scroccotour-frontend.herokuapp.com'
+var b_path = 'https://scroccotour-backend.herokuapp.com'
 //var path = 'https://scroccotour-backend.herokuapp.com'
 
 

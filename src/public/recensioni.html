@@ -20,12 +20,12 @@
        </button>
        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
          <div class="navbar-nav">
-           <a class="nav-link" href="http://localhost:8081/topTour">Top Tours</a>
-           <a class="nav-link" href="http://localhost:8081/nuovotour">Nuovo Tour</a>
-           <a class="nav-link" href="http://localhost:8081/profilo">I tuoi tour</a>
-           <a class="nav-link active" href="http://localhost:8081/recensioni">Recensioni</a>
-           <a class="nav-link" aria-current="page" href="http://localhost:8081/profilo">Profilo</a>
-           <a class="nav-link" href="http://localhost:8081/logout">Logout</a>
+           <a class="nav-link" href="https://scroccotour-frontend.herokuapp.com/topTour">Top Tours</a>
+           <a class="nav-link" href="https://scroccotour-frontend.herokuapp.com/nuovotour">Nuovo Tour</a>
+           <a class="nav-link" href="https://scroccotour-frontend.herokuapp.com/profilo">I tuoi tour</a>
+           <a class="nav-link active" href="https://scroccotour-frontend.herokuapp.com/recensioni">Recensioni</a>
+           <a class="nav-link" aria-current="page" href="https://scroccotour-frontend.herokuapp.com/profilo">Profilo</a>
+           <a class="nav-link" href="https://scroccotour-frontend.herokuapp.com/logout">Logout</a>
            <!--<a class="nav-link disabled">Disabled</a>-->
          </div>
        </div>
@@ -68,7 +68,7 @@
                           $("#cards-host").append(`
                           <div class="card">
                           <div class="card-body">
-                              <a href="http://localhost:8081/recensionehost?host=${d.host}&home=${d.city}">${d.host}</a>
+                              <a href="https://scroccotour-frontend.herokuapp.com/recensionehost?host=${d.host}&home=${d.city}">${d.host}</a>
                               <p class="card-text">Recensisci il tuo soggiorno a ${d.city}</p>
                           </div>
                           </div>
@@ -104,7 +104,7 @@
                           $("#cards-guest").append(`
                           <div class="card">
                           <div class="card-body">
-                              <a href="http://localhost:8081/recensioneguest?guest=${d}">${d}</a>
+                              <a href="https://scroccotour-frontend.herokuapp.com/recensioneguest?guest=${d}">${d}</a>
                               <p class="card-text">Recensisci la permanenza di ${d}</p>
                           </div>
                           </div>
